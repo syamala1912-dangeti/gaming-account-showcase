@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Gaming Account Showcase</title>
+  <title>BGMI Gaming Showcase</title>
 
   <style>
     * {
@@ -14,40 +14,83 @@
       font-family: Arial, sans-serif;
     }
 
-    body {
-      background: #080b12;
-      color: white;
+    html {
+      scroll-behavior: smooth;
     }
 
+    body {
+      background: #070912;
+      color: #ffffff;
+    }
+
+    /* HEADER */
+
     header {
-      padding: 25px 8%;
+      padding: 25px 7%;
       text-align: center;
-      background: linear-gradient(135deg, #111827, #090d16);
-      border-bottom: 1px solid #263044;
+      background: linear-gradient(135deg, #111827, #080b15);
+      border-bottom: 1px solid #252c40;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     header h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: 28px;
     }
 
     header p {
+      margin-top: 7px;
       color: #9ca3af;
+      font-size: 14px;
     }
+
+    /* HERO */
 
     .hero {
-      padding: 45px 8%;
+      padding: 65px 6% 45px;
       text-align: center;
+      background:
+        radial-gradient(circle at top, #24104a 0%, #070912 55%);
     }
 
-    .profile {
-      max-width: 700px;
+    .badge {
+      display: inline-block;
+      padding: 7px 15px;
+      border-radius: 30px;
+      background: #1b1235;
+      border: 1px solid #7137d8;
+      color: #c4a4ff;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .hero h2 span {
+      color: #a855f7;
+    }
+
+    .hero-text {
+      color: #9ca3af;
+      max-width: 600px;
       margin: auto;
+      line-height: 1.6;
+    }
+
+    /* PROFILE */
+
+    .profile {
+      max-width: 900px;
+      margin: 35px auto 0;
       padding: 30px;
-      border-radius: 20px;
-      background: #111827;
-      border: 1px solid #263044;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid #2b344b;
+      border-radius: 22px;
+      box-shadow: 0 0 35px rgba(124, 58, 237, 0.15);
     }
 
     .avatar {
@@ -58,229 +101,606 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 45px;
+      font-size: 48px;
       background: linear-gradient(135deg, #7c3aed, #2563eb);
+      border: 3px solid #a855f7;
     }
 
-    .profile h2 {
+    .profile h3 {
       margin-top: 18px;
+      font-size: 25px;
     }
 
-    .profile p {
-      color: #9ca3af;
-      margin-top: 8px;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 25px;
-    }
-
-    .stat {
-      padding: 18px;
-      background: #0b1220;
-      border-radius: 12px;
-      border: 1px solid #263044;
-    }
-
-    .stat h3 {
-      font-size: 24px;
-    }
-
-    .stat p {
-      font-size: 13px;
-      margin-top: 5px;
-    }
-
-    section {
-      padding: 30px 8%;
-    }
-
-    section h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .card {
-      min-height: 160px;
-      padding: 25px;
-      border-radius: 16px;
-      background: #111827;
-      border: 1px solid #263044;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .card .icon {
-      font-size: 40px;
-      margin-bottom: 12px;
-    }
-
-    .card p {
+    .profile-description {
       color: #9ca3af;
       margin-top: 7px;
     }
 
-    .gallery {
+    /* STATS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      padding: 22px;
+      background: #0b1020;
+      border: 1px solid #293247;
+      border-radius: 15px;
+    }
+
+    .stat .number {
+      font-size: 30px;
+      font-weight: bold;
+      color: #c084fc;
+    }
+
+    .stat .label {
+      margin-top: 6px;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    /* SECTIONS */
+
+    section {
+      padding: 55px 7%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-title h2 {
+      font-size: 30px;
+    }
+
+    .section-title p {
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+
+    /* X SUITS */
+
+    .x-suits {
+      max-width: 1050px;
+      margin: auto;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      max-width: 1000px;
+      gap: 20px;
+    }
+
+    .x-card {
+      padding: 28px 20px;
+      min-height: 190px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #171126, #0e1220);
+      border: 1px solid #46316c;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .x-card:hover {
+      transform: translateY(-7px);
+      border-color: #a855f7;
+    }
+
+    .x-icon {
+      font-size: 45px;
+      margin-bottom: 15px;
+    }
+
+    .x-card h3 {
+      font-size: 18px;
+    }
+
+    .stars {
+      color: #facc15;
+      margin-top: 9px;
+    }
+
+    .x-card p {
+      color: #9ca3af;
+      font-size: 13px;
+      margin-top: 9px;
+    }
+
+    /* GUN SKINS */
+
+    .guns {
+      max-width: 1100px;
       margin: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .gun {
+      padding: 18px;
+      min-height: 120px;
+      background: #101624;
+      border: 1px solid #273148;
+      border-radius: 14px;
+      transition: 0.3s;
+    }
+
+    .gun:hover {
+      transform: translateY(-5px);
+      border-color: #8b5cf6;
+    }
+
+    .gun-icon {
+      font-size: 25px;
+      margin-bottom: 10px;
+    }
+
+    .gun h3 {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .level {
+      display: inline-block;
+      margin-top: 9px;
+      padding: 4px 9px;
+      border-radius: 20px;
+      background: #21163b;
+      color: #c084fc;
+      font-size: 11px;
+    }
+
+    /* GALLERY */
+
+    .gallery {
+      max-width: 1050px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
     }
 
     .gallery-item {
-      height: 180px;
-      border-radius: 15px;
-      background: linear-gradient(135deg, #1e293b, #111827);
-      border: 1px solid #263044;
+      height: 210px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, #172033, #0d111d);
+      border: 1px dashed #46516b;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #9ca3af;
       text-align: center;
-      padding: 15px;
     }
+
+    .gallery-item span {
+      font-size: 45px;
+      margin-bottom: 12px;
+    }
+
+    /* CONTACT */
 
     .contact {
       text-align: center;
-      padding: 50px 8%;
+      padding: 65px 7%;
+      background: linear-gradient(135deg, #120b25, #080b14);
+    }
+
+    .contact p {
+      color: #9ca3af;
+      margin-top: 10px;
     }
 
     .contact-btn {
       display: inline-block;
-      margin-top: 18px;
-      padding: 13px 28px;
+      margin-top: 22px;
+      padding: 14px 30px;
       border-radius: 30px;
-      background: #7c3aed;
+      background: linear-gradient(135deg, #7c3aed, #9333ea);
       color: white;
       text-decoration: none;
       font-weight: bold;
     }
 
-    .contact-btn:hover {
-      background: #6d28d9;
-    }
+    /* FOOTER */
 
     footer {
       padding: 25px;
       text-align: center;
       color: #6b7280;
-      border-top: 1px solid #263044;
       font-size: 13px;
+      border-top: 1px solid #20283a;
+      line-height: 1.7;
     }
 
-    @media (max-width: 700px) {
-      header h1 {
-        font-size: 25px;
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+
+      .hero h2 {
+        font-size: 31px;
       }
 
-      .stats,
-      .cards,
+      .x-suits {
+        grid-template-columns: 1fr;
+      }
+
+      .guns {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
       .gallery {
         grid-template-columns: 1fr;
       }
 
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 450px) {
+
+      header h1 {
+        font-size: 22px;
+      }
+
       .hero {
-        padding: 30px 5%;
+        padding-top: 45px;
+      }
+
+      .guns {
+        grid-template-columns: 1fr;
       }
 
       section {
-        padding: 25px 5%;
+        padding: 40px 5%;
       }
     }
+
   </style>
 </head>
 
 <body>
 
+  <!-- HEADER -->
+
   <header>
-    <h1>🎮 Gaming Account Showcase</h1>
-    <p>Explore the collection, skins and achievements</p>
+    <h1>🎮 BGMI Gaming Showcase</h1>
+    <p>Premium Collection • X-Suits • Gun Skins</p>
   </header>
 
+
+  <!-- HERO -->
+
   <div class="hero">
+
+    <div class="badge">🔥 GAMING PROFILE SHOWCASE</div>
+
+    <h2>BGMI <span>Premium Account</span></h2>
+
+    <p class="hero-text">
+      Explore the featured gaming collection, rare X-Suits,
+      upgraded gun skins and memorable gameplay screenshots.
+    </p>
+
+
+    <!-- PROFILE -->
+
     <div class="profile">
 
       <div class="avatar">🎮</div>
 
-      <h2>Gaming Profile</h2>
-      <p>Player Showcase • Collection • Achievements</p>
+      <h3>Gaming Profile</h3>
+
+      <p class="profile-description">
+        Player Collection & Achievement Showcase
+      </p>
+
+
+      <!-- STATS -->
 
       <div class="stats">
+
         <div class="stat">
-          <h3>75</h3>
-          <p>Account Level</p>
+          <div class="number">79</div>
+          <div class="label">⭐ Account Level</div>
         </div>
 
         <div class="stat">
-          <h3>120+</h3>
-          <p>Items</p>
+          <div class="number">60</div>
+          <div class="label">📦 Collection</div>
         </div>
 
-        <div class="stat">
-          <h3>25</h3>
-          <p>Rare Items</p>
-        </div>
       </div>
 
     </div>
+
   </div>
 
+
+  <!-- X SUITS -->
+
   <section>
-    <h2>⭐ Collection</h2>
 
-    <div class="cards">
+    <div class="section-title">
+      <h2>👑 X-Suits</h2>
+      <p>Featured premium outfits</p>
+    </div>
 
-      <div class="card">
-        <div class="icon">👑</div>
-        <h3>X-Suits</h3>
-        <p>Featured X-Suit collection</p>
+
+    <div class="x-suits">
+
+      <div class="x-card">
+
+        <div class="x-icon">👑</div>
+
+        <h3>Phoenixtra X-Suit</h3>
+
+        <div class="stars">⭐⭐ 2-Star</div>
+
+        <p>Featured X-Suit</p>
+
       </div>
 
-      <div class="card">
-        <div class="icon">🔫</div>
-        <h3>Gun Skins</h3>
-        <p>Featured weapon skins</p>
+
+      <div class="x-card">
+
+        <div class="x-icon">⚡</div>
+
+        <h3>Dravion X-Suit</h3>
+
+        <div class="stars">⭐ 1-Star</div>
+
+        <p>Featured X-Suit</p>
+
       </div>
 
-      <div class="card">
-        <div class="icon">🏆</div>
-        <h3>Achievements</h3>
-        <p>Gaming achievements</p>
+
+      <div class="x-card">
+
+        <div class="x-icon">❄️</div>
+
+        <h3>The Cryonix Wraith Set</h3>
+
+        <div class="stars">✨ Futuristic Gilt</div>
+
+        <p>Featured Set</p>
+
       </div>
 
     </div>
+
   </section>
 
+
+  <!-- GUN SKINS -->
+
   <section>
-    <h2>🖼️ Screenshots Gallery</h2>
+
+    <div class="section-title">
+
+      <h2>🔫 Gun Skins</h2>
+
+      <p>Featured weapon collection</p>
+
+    </div>
+
+
+    <div class="guns">
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>M416 Glacier</h3>
+        <span class="level">Lv.7</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>UZI Savagery</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>Vector Ruby Tooth</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>Groza Splendid Battle</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>UMP45 Marine Evolution</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>Crossbow Circus of Screams</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>Thompson Violet Finesse</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>M24 Industry Edge</h3>
+        <span class="level">Lv.2</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>M16A4 Thornrose Dawn</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>SKS Graceful Trigger</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>Mk47 Patchmetal Bunny</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>Tomahawk Burning Godzilla</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>Mk14 Cuddly Nailoong</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>SCAR-L Chow Blaster</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>MP7 Candied Haunter</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>VSS Winter Patrol</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>DP-28 Rebel Roguefox</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>MP5K Retro Pixel</h3>
+        <span class="level">Lv.1</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>S1897 Splendid Assault</h3>
+        <span class="level">Lv.3</span>
+      </div>
+
+      <div class="gun">
+        <div class="gun-icon">🦋</div>
+        <h3>SLR Nautical Expert</h3>
+        <span class="level">Lv.2</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- GALLERY -->
+
+  <section>
+
+    <div class="section-title">
+
+      <h2>🖼️ Screenshots Gallery</h2>
+
+      <p>Gameplay & collection screenshots</p>
+
+    </div>
+
 
     <div class="gallery">
 
       <div class="gallery-item">
-        📸<br>
-        Screenshot 01<br>
-        <small>Image will be added later</small>
+        <span>📸</span>
+        Screenshot 01
+        <small>Image will be added</small>
       </div>
 
       <div class="gallery-item">
-        📸<br>
-        Screenshot 02<br>
-        <small>Image will be added later</small>
+        <span>📸</span>
+        Screenshot 02
+        <small>Image will be added</small>
       </div>
 
       <div class="gallery-item">
-        📸<br>
+        <span>📸</span>
+        Screenshot 03
+        <small>Image will be added</small>
+      </div>
+
+      <div class="gallery-item">
+        <span>📸</span>
+        Screenshot 04
+        <small>Image will be added</small>
+      </div>
+
+      <div class="gallery-item">
+        <span>📸</span>
+        Screenshot 05
+        <small>Image will be added</small>
+      </div>
+
+      <div class="gallery-item">
+        <span>📸</span>
+        Screenshot 06
+        <small>Image will be added</small>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CONTACT -->
+
+  <div class="contact">
+
+    <h2>📩 Contact / DM</h2>
+
+    <p>
+      For showcase-related questions, feel free to get in touch.
+    </p>
+
+    <a class="contact-btn" href="mailto:yourmail@example.com">
+      Send Message
+    </a>
+
+  </div>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    🔒 Showcase website only<br>
+    No login credentials • No account transfer • No buying/selling
+
+    <br><br>
+
+    © 2026 BGMI Gaming Showcase
+
+  </footer>
+
+</body>
+</html>
