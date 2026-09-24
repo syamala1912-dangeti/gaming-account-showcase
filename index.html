@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Gaming Account Showcase</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #080b12;
+      color: white;
+    }
+
+    header {
+      padding: 25px 8%;
+      text-align: center;
+      background: linear-gradient(135deg, #111827, #090d16);
+      border-bottom: 1px solid #263044;
+    }
+
+    header h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #9ca3af;
+    }
+
+    .hero {
+      padding: 45px 8%;
+      text-align: center;
+    }
+
+    .profile {
+      max-width: 700px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 20px;
+      background: #111827;
+      border: 1px solid #263044;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      margin: auto;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 45px;
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+    }
+
+    .profile h2 {
+      margin-top: 18px;
+    }
+
+    .profile p {
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .stat {
+      padding: 18px;
+      background: #0b1220;
+      border-radius: 12px;
+      border: 1px solid #263044;
+    }
+
+    .stat h3 {
+      font-size: 24px;
+    }
+
+    .stat p {
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    section {
+      padding: 30px 8%;
+    }
+
+    section h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      min-height: 160px;
+      padding: 25px;
+      border-radius: 16px;
+      background: #111827;
+      border: 1px solid #263044;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .card .icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: #9ca3af;
+      margin-top: 7px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .gallery-item {
+      height: 180px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #1e293b, #111827);
+      border: 1px solid #263044;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      text-align: center;
+      padding: 15px;
+    }
+
+    .contact {
+      text-align: center;
+      padding: 50px 8%;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 13px 28px;
+      border-radius: 30px;
+      background: #7c3aed;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .contact-btn:hover {
+      background: #6d28d9;
+    }
+
+    footer {
+      padding: 25px;
+      text-align: center;
+      color: #6b7280;
+      border-top: 1px solid #263044;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      header h1 {
+        font-size: 25px;
+      }
+
+      .stats,
+      .cards,
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 30px 5%;
+      }
+
+      section {
+        padding: 25px 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🎮 Gaming Account Showcase</h1>
+    <p>Explore the collection, skins and achievements</p>
+  </header>
+
+  <div class="hero">
+    <div class="profile">
+
+      <div class="avatar">🎮</div>
+
+      <h2>Gaming Profile</h2>
+      <p>Player Showcase • Collection • Achievements</p>
+
+      <div class="stats">
+        <div class="stat">
+          <h3>75</h3>
+          <p>Account Level</p>
+        </div>
+
+        <div class="stat">
+          <h3>120+</h3>
+          <p>Items</p>
+        </div>
+
+        <div class="stat">
+          <h3>25</h3>
+          <p>Rare Items</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <section>
+    <h2>⭐ Collection</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="icon">👑</div>
+        <h3>X-Suits</h3>
+        <p>Featured X-Suit collection</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🔫</div>
+        <h3>Gun Skins</h3>
+        <p>Featured weapon skins</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🏆</div>
+        <h3>Achievements</h3>
+        <p>Gaming achievements</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>🖼️ Screenshots Gallery</h2>
+
+    <div class="gallery">
+
+      <div class="gallery-item">
+        📸<br>
+        Screenshot 01<br>
+        <small>Image will be added later</small>
+      </div>
+
+      <div class="gallery-item">
+        📸<br>
+        Screenshot 02<br>
+        <small>Image will be added later</small>
+      </div>
+
+      <div class="gallery-item">
+        📸<br>
