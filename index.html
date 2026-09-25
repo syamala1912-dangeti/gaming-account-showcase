@@ -684,5 +684,49 @@
     SUPABASE_PUBLISHABLE_KEY
   );
 </script>
+<!-- ADMIN LOGIN -->
+<div id="adminLogin" style="display:block; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;">
+  <h2>🔐 Admin Login</h2>
+
+  <input
+    id="adminEmail"
+    type="email"
+    placeholder="Admin Email"
+    style="width:100%; padding:12px; margin:8px 0;"
+  >
+
+  <input
+    id="adminPassword"
+    type="password"
+    placeholder="Password"
+    style="width:100%; padding:12px; margin:8px 0;"
+  >
+
+  <button onclick="adminLogin()" style="padding:12px 20px;">
+    Login
+  </button>
+
+  <p id="loginMessage"></p>
+</div>
+
+<script>
+  async function adminLogin() {
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+    const message = document.getElementById("loginMessage");
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      message.textContent = "Login failed. Check email and password.";
+      return;
+    }
+
+    message.textContent = "✅ Login successful!";
+  }
+</script>  
 </body>
 </html>
