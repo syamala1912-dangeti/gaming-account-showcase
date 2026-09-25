@@ -721,7 +721,7 @@
     });
 
     if (error) {
-      message.textContent = "Login failed. Check email and password.";
+     message.textContent = "Login failed: " + error.message;
       return;
     }
 
