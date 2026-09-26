@@ -779,7 +779,10 @@ loadGalleryImages();
 
 <!-- ADMIN LOGIN -->
 
-<div id="adminLogin" style="display:block; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;">
+<div
+  id="adminLogin"
+  style="display:block; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;"
+>
 
   <h2>🔐 Admin Login</h2>
 
@@ -823,7 +826,6 @@ loadGalleryImages();
     Manage your gaming showcase
   </p>
 
-
   <div
     style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-top:25px;"
   >
@@ -836,7 +838,6 @@ loadGalleryImages();
       🖼️ Manage Gallery
     </button>
 
-
     <button
       type="button"
       onclick="alert('Profile management coming next!')"
@@ -845,7 +846,6 @@ loadGalleryImages();
       👤 Manage Profile
     </button>
 
-
     <button
       type="button"
       onclick="alert('Gun skins management coming next!')"
@@ -853,7 +853,6 @@ loadGalleryImages();
     >
       🔫 Manage Gun Skins
     </button>
-
 
     <button
       type="button"
@@ -941,205 +940,257 @@ loadGalleryImages();
 
   /* LOGIN */
 
-  document.getElementById("loginButton").addEventListener("click", async function () {
+  document
+    .getElementById("loginButton")
+    .addEventListener("click", async function () {
 
-    const email =
-      document.getElementById("adminEmail").value.trim();
+      const email =
+        document.getElementById("adminEmail").value.trim();
 
-    const password =
-      document.getElementById("adminPassword").value;
+      const password =
+        document.getElementById("adminPassword").value;
 
-    const message =
-      document.getElementById("loginMessage");
+      const message =
+        document.getElementById("loginMessage");
 
+      if (!email || !password) {
+        message.textContent =
+          "❌ Please enter email and password.";
+        return;
+      }
 
-    if (!email || !password) {
+      message.textContent = "⏳ Logging in...";
 
-      message.textContent =
-        "❌ Please enter email and password.";
+      const { error } =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
-      return;
-    }
-
-
-    message.textContent = "⏳ Logging in...";
-
-
-    const { error } =
-      await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-
-    if (error) {
-
-      message.textContent =
-        "❌ Login failed: " + error.message;
-
-      return;
-    }
-
-
-    message.textContent =
-      "✅ Login successful!";
-
-
-    document.getElementById("adminLogin").style.display =
-      "none";
-
-    document.getElementById("adminDashboard").style.display =
-      "block";
-
-  });
-
-
-  /* GALLERY BUTTON */
-
-  document.getElementById("galleryButton").addEventListener("click", function () {
-
-    const box =
-      document.getElementById("galleryManager");
-
-
-    if (box.style.display === "none") {
-
-      box.style.display = "block";
-
-    } else {
-
-      box.style.display = "none";
-
-    }
-
-  });
-
-
-  /* GALLERY UPLOAD */
-
-  document.getElementById("uploadGalleryButton").addEventListener("click", async function () {
-
-    const fileInput =
-      document.getElementById("galleryFile");
-
-    const message =
-      document.getElementById("galleryMessage");
-
-    const file =
-      fileInput.files[0];
-
-
-    if (!file) {
+      if (error) {
+        message.textContent =
+          "❌ Login failed: " + error.message;
+        return;
+      }
 
       message.textContent =
-        "❌ Please select an image.";
-
-      return;
-    }
-
-
-    message.textContent =
-      "⏳ Uploading...";
-
-
-    const fileName =
-      Date.now() + "_" + file.name;
-
-
-    const { error } =
-      await supabaseClient.storage
-        .from("gaming-images")
-        .upload(fileName, file);
-
-
-    if (error) {
-
-      message.textContent =
-        "❌ Upload failed: " + error.message;
-
-      return;
-    }
-
-
-    message.textContent =
-      "✅ Image uploaded successfully!";
-
-    fileInput.value = "";
-
-  });
-
-
-  /* PASSWORD RECOVERY */
-
-  supabaseClient.auth.onAuthStateChange(function (event, session) {
-
-    if (event === "PASSWORD_RECOVERY") {
+        "✅ Login successful!";
 
       document.getElementById("adminLogin").style.display =
         "none";
 
       document.getElementById("adminDashboard").style.display =
-        "none";
-
-      document.getElementById("resetPasswordBox").style.display =
         "block";
+    });
 
+
+  /* GALLERY BUTTON */
+
+  document
+    .getElementById("galleryButton")
+    .addEventListener("click", function () {
+
+      const box =
+        document.getElementById("galleryManager");
+
+      if (box.style.display === "none") {
+        box.style.display = "block";
+      } else {
+        box.style.display = "none";
+      }
+
+    });
+
+
+  /* GALLERY UPLOAD */
+
+  document
+    .getElementById("uploadGalleryButton")
+    .addEventListener("click", async function () {
+
+      const fileInput =
+        document.getElementById("galleryFile");
+
+      const message =
+        document.getElementById("galleryMessage");
+
+      const file =
+        fileInput.files[0];
+
+      if (!file) {
+        message.textContent =
+          "❌ Please select an image.";
+        return;
+      }
+
+      message.textContent =
+        "⏳ Uploading...";
+
+      const fileName =
+        Date.now() + "_" + file.name;
+
+      const { error } =
+        await supabaseClient.storage
+          .from("gaming-images")
+          .upload(fileName, file);
+
+      if (error) {
+        message.textContent =
+          "❌ Upload failed: " + error.message;
+        return;
+      }
+
+      message.textContent =
+        "✅ Image uploaded successfully!";
+
+      fileInput.value = "";
+
+      loadGalleryImages();
+    });
+
+
+  /* LOAD PUBLIC GALLERY */
+
+  async function loadGalleryImages() {
+
+    const gallery =
+      document.getElementById("gallery");
+
+    if (!gallery) {
+      return;
     }
 
-  });
+    gallery.innerHTML = "";
+
+    const { data, error } =
+      await supabaseClient.storage
+        .from("gaming-images")
+        .list("", {
+          limit: 100,
+          sortBy: {
+            column: "name",
+            order: "desc"
+          }
+        });
+
+    if (error) {
+      console.log("Gallery error:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      return;
+    }
+
+    data.forEach(function (file, index) {
+
+      if (!file.name) {
+        return;
+      }
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "gallery-item";
+
+      const img =
+        document.createElement("img");
+
+      const publicUrl =
+        supabaseClient.storage
+          .from("gaming-images")
+          .getPublicUrl(file.name)
+          .data.publicUrl;
+
+      img.src = publicUrl;
+
+      img.alt =
+        "BGMI Screenshot " + (index + 1);
+
+      item.appendChild(img);
+
+      gallery.appendChild(item);
+
+    });
+
+  }
+
+
+  /* PASSWORD RECOVERY */
+
+  supabaseClient.auth.onAuthStateChange(
+    function (event, session) {
+
+      if (event === "PASSWORD_RECOVERY") {
+
+        document.getElementById("adminLogin").style.display =
+          "none";
+
+        document.getElementById("adminDashboard").style.display =
+          "none";
+
+        document.getElementById("resetPasswordBox").style.display =
+          "block";
+      }
+
+    }
+  );
 
 
   /* UPDATE PASSWORD */
 
-  document.getElementById("updatePasswordButton").addEventListener("click", async function () {
+  document
+    .getElementById("updatePasswordButton")
+    .addEventListener("click", async function () {
 
-    const newPassword =
-      document.getElementById("newPassword").value;
+      const newPassword =
+        document.getElementById("newPassword").value;
 
-    const confirmPassword =
-      document.getElementById("confirmPassword").value;
+      const confirmPassword =
+        document.getElementById("confirmPassword").value;
 
-    const message =
-      document.getElementById("resetMessage");
+      const message =
+        document.getElementById("resetMessage");
 
+      if (newPassword !== confirmPassword) {
 
-    if (newPassword !== confirmPassword) {
+        message.textContent =
+          "❌ Passwords do not match.";
+
+        return;
+      }
+
+      if (newPassword.length < 6) {
+
+        message.textContent =
+          "❌ Password must be at least 6 characters.";
+
+        return;
+      }
+
+      const { error } =
+        await supabaseClient.auth.updateUser({
+          password: newPassword
+        });
+
+      if (error) {
+
+        message.textContent =
+          "❌ " + error.message;
+
+        return;
+      }
 
       message.textContent =
-        "❌ Passwords do not match.";
+        "✅ Password updated successfully!";
 
-      return;
-    }
-
-
-    if (newPassword.length < 6) {
-
-      message.textContent =
-        "❌ Password must be at least 6 characters.";
-
-      return;
-    }
+    });
 
 
-    const { error } =
-      await supabaseClient.auth.updateUser({
-        password: newPassword
-      });
+  /* LOAD GALLERY WHEN PAGE OPENS */
 
-
-    if (error) {
-
-      message.textContent =
-        "❌ " + error.message;
-
-      return;
-    }
-
-
-    message.textContent =
-      "✅ Password updated successfully!";
-
-  });
+  loadGalleryImages();
 
 </script>
 
