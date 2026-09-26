@@ -641,13 +641,10 @@
   </footer>
 
 
-  <!-- GALLERY SCRIPT -->
+ <!-- GALLERY SCRIPT -->
 
-  <script>
-
-    <script>
+<script>
 async function loadGalleryImages() {
-
   const gallery = document.getElementById("gallery");
 
   gallery.innerHTML = "";
@@ -656,7 +653,10 @@ async function loadGalleryImages() {
     .from("gaming-images")
     .list("", {
       limit: 100,
-      sortBy: { column: "name", order: "desc" }
+      sortBy: {
+        column: "name",
+        order: "desc"
+      }
     });
 
   if (error) {
@@ -665,7 +665,6 @@ async function loadGalleryImages() {
   }
 
   data.forEach((file, index) => {
-
     const item = document.createElement("div");
     item.className = "gallery-item";
 
@@ -679,12 +678,50 @@ async function loadGalleryImages() {
 
     item.appendChild(img);
     gallery.appendChild(item);
-
   });
 }
 
 loadGalleryImages();
-<script>
+</script>
+async function loadGalleryImages() {
+  const gallery = document.getElementById("gallery");
+
+  gallery.innerHTML = "";
+
+  const { data, error } = await supabaseClient.storage
+    .from("gaming-images")
+    .list("", {
+      limit: 100,
+      sortBy: {
+        column: "name",
+        order: "desc"
+      }
+    });
+
+  if (error) {
+    console.log("Gallery error:", error);
+    return;
+  }
+
+  data.forEach((file, index) => {
+    const item = document.createElement("div");
+    item.className = "gallery-item";
+
+    const img = document.createElement("img");
+
+    img.src = supabaseClient.storage
+      .from("gaming-images")
+      .getPublicUrl(file.name).data.publicUrl;
+
+    img.alt = "BGMI Screenshot " + (index + 1);
+
+    item.appendChild(img);
+    gallery.appendChild(item);
+  });
+}
+
+loadGalleryImages();
+</script>
 async function loadGalleryImages() {
   const gallery = document.getElementById("gallery");
 
