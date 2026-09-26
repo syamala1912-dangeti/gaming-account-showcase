@@ -761,6 +761,70 @@ document.getElementById("adminDashboard").style.display = "block";
   </div>
 
 </div>  
+<!-- GALLERY MANAGER -->
+
+<div id="galleryManager" style="display:none; margin:25px auto; max-width:900px; padding:20px; background:#0f0a1c; border:1px solid #46316c; border-radius:15px;">
+
+  <h3>🖼️ Gallery Manager</h3>
+
+  <input
+    id="galleryFile"
+    type="file"
+    accept="image/*"
+    style="margin:15px 0;"
+  >
+
+  <br>
+
+  <button
+    onclick="uploadGalleryImage()"
+    style="padding:12px 20px; border:0; border-radius:10px; background:#22c55e; color:white;">
+    ⬆️ Upload Image
+  </button>
+
+  <p id="galleryMessage"></p>
+
+</div>
+
+<script>
+  function openGalleryManager() {
+    const box = document.getElementById("galleryManager");
+
+    if (box.style.display === "none") {
+      box.style.display = "block";
+    } else {
+      box.style.display = "none";
+    }
+  }
+
+  async function uploadGalleryImage() {
+    const fileInput = document.getElementById("galleryFile");
+    const message = document.getElementById("galleryMessage");
+
+    const file = fileInput.files[0];
+
+    if (!file) {
+      message.textContent = "❌ Please select an image.";
+      return;
+    }
+
+    message.textContent = "⏳ Uploading...";
+
+    const fileName = Date.now() + "_" + file.name;
+
+    const { error } = await supabaseClient.storage
+      .from("gaming-images")
+      .upload(fileName, file);
+
+    if (error) {
+      message.textContent = "❌ Upload failed: " + error.message;
+      return;
+    }
+
+    message.textContent = "✅ Image uploaded successfully!";
+    fileInput.value = "";
+  }
+</script>  
 <!-- RESET PASSWORD -->
 <div id="resetPasswordBox" style="display:none; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;">
   <h2>🔑 Set New Password</h2>
