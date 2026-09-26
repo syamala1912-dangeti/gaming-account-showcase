@@ -727,6 +727,66 @@
 
     message.textContent = "✅ Login successful!";
   }
-</script>  
+</script>
+<!-- RESET PASSWORD -->
+<div id="resetPasswordBox" style="display:none; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;">
+  <h2>🔑 Set New Password</h2>
+
+  <input
+    id="newPassword"
+    type="password"
+    placeholder="New Password"
+    style="width:100%; padding:12px; margin:8px 0;"
+  >
+
+  <input
+    id="confirmPassword"
+    type="password"
+    placeholder="Confirm New Password"
+    style="width:100%; padding:12px; margin:8px 0;"
+  >
+
+  <button onclick="updatePassword()" style="padding:12px 20px;">
+    Update Password
+  </button>
+
+  <p id="resetMessage"></p>
+</div>
+
+<script>
+  supabaseClient.auth.onAuthStateChange(async (event, session) => {
+    if (event === "PASSWORD_RECOVERY") {
+      document.getElementById("adminLogin").style.display = "none";
+      document.getElementById("resetPasswordBox").style.display = "block";
+    }
+  });
+
+  async function updatePassword() {
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const message = document.getElementById("resetMessage");
+
+    if (newPassword !== confirmPassword) {
+      message.textContent = "❌ Passwords do not match.";
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      message.textContent = "❌ Password must be at least 6 characters.";
+      return;
+    }
+
+    const { error } = await supabaseClient.auth.updateUser({
+      password: newPassword
+    });
+
+    if (error) {
+      message.textContent = "❌ " + error.message;
+      return;
+    }
+
+    message.textContent = "✅ Password updated successfully!";
+  }
+</script>
 </body>
 </html>
