@@ -1,735 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>BGMI Gaming Showcase</title>
 
   <style>
-
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
       font-family: Arial, sans-serif;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
-      background: #070912;
-      color: #ffffff;
+      background: #080612;
+      color: white;
     }
 
     header {
-      padding: 25px 7%;
+      background: #120d24;
+      padding: 20px;
       text-align: center;
-      background: linear-gradient(135deg, #111827, #080b15);
-      border-bottom: 1px solid #252c40;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      border-bottom: 1px solid #2b1f4d;
     }
 
     header h1 {
+      color: #b98cff;
       font-size: 28px;
     }
 
     header p {
-      margin-top: 7px;
-      color: #9ca3af;
-      font-size: 14px;
+      color: #aaa;
+      margin-top: 6px;
     }
 
     .hero {
-      padding: 65px 6% 45px;
       text-align: center;
-      background:
-        radial-gradient(circle at top, #24104a 0%, #070912 55%);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 7px 15px;
-      border-radius: 30px;
-      background: #1b1235;
-      border: 1px solid #7137d8;
-      color: #c4a4ff;
-      font-size: 13px;
-      margin-bottom: 18px;
+      padding: 45px 20px;
+      background: linear-gradient(135deg, #120d24, #24104a);
     }
 
     .hero h2 {
-      font-size: 42px;
-      margin-bottom: 12px;
+      font-size: 34px;
+      color: #ffffff;
     }
 
-    .hero h2 span {
-      color: #a855f7;
-    }
-
-    .hero-text {
-      color: #9ca3af;
-      max-width: 600px;
-      margin: auto;
-      line-height: 1.6;
-    }
-
-    .profile {
-      max-width: 900px;
-      margin: 35px auto 0;
-      padding: 30px;
-      background: rgba(17, 24, 39, 0.9);
-      border: 1px solid #2b344b;
-      border-radius: 22px;
-      box-shadow: 0 0 35px rgba(124, 58, 237, 0.15);
-    }
-
-    .avatar {
-      width: 100px;
-      height: 100px;
-      margin: auto;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      background: linear-gradient(135deg, #7c3aed, #2563eb);
-      border: 3px solid #a855f7;
-    }
-
-    .profile h3 {
-      margin-top: 18px;
-      font-size: 25px;
-    }
-
-    .profile-description {
-      color: #9ca3af;
-      margin-top: 7px;
+    .hero p {
+      margin-top: 10px;
+      color: #c8b8e8;
     }
 
     .stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 30px 20px;
     }
 
-    .stat {
-      padding: 22px;
-      background: #0b1020;
-      border: 1px solid #293247;
+    .stat-card {
+      background: #151022;
+      border: 1px solid #302052;
       border-radius: 15px;
+      padding: 20px 35px;
+      text-align: center;
+      min-width: 150px;
     }
 
-    .stat .number {
-      font-size: 30px;
-      font-weight: bold;
-      color: #c084fc;
+    .stat-card h3 {
+      color: #b98cff;
+      font-size: 28px;
     }
 
-    .stat .label {
-      margin-top: 6px;
-      color: #9ca3af;
-      font-size: 14px;
+    .stat-card p {
+      color: #aaa;
+      margin-top: 5px;
     }
 
     section {
-      padding: 55px 7%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .section-title h2 {
-      font-size: 30px;
-    }
-
-    .section-title p {
-      color: #9ca3af;
-      margin-top: 8px;
-    }
-
-    .x-suits {
-      max-width: 1050px;
+      padding: 30px 20px;
+      max-width: 1100px;
       margin: auto;
+    }
+
+    section h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #b98cff;
+    }
+
+    .cards {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
     }
 
-    .x-card {
-      padding: 28px 20px;
-      min-height: 190px;
-      border-radius: 18px;
-      background: linear-gradient(145deg, #171126, #0e1220);
-      border: 1px solid #46316c;
+    .card {
+      background: #151022;
+      border: 1px solid #302052;
+      border-radius: 15px;
+      padding: 15px;
       text-align: center;
-      transition: 0.3s;
     }
 
-    .x-card:hover {
-      transform: translateY(-7px);
-      border-color: #a855f7;
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
     }
 
-    .x-icon {
-      font-size: 45px;
-      margin-bottom: 15px;
-    }
-
-    .x-card h3 {
-      font-size: 18px;
-    }
-
-    .stars {
-      color: #facc15;
-      margin-top: 9px;
-    }
-
-    .x-card p {
-      color: #9ca3af;
-      font-size: 13px;
-      margin-top: 9px;
-    }
-
-    .guns {
-      max-width: 1100px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-    }
-
-    .gun {
-      padding: 18px;
-      min-height: 120px;
-      background: #101624;
-      border: 1px solid #273148;
-      border-radius: 14px;
-      transition: 0.3s;
-    }
-
-    .gun:hover {
-      transform: translateY(-5px);
-      border-color: #8b5cf6;
-    }
-
-    .gun-icon {
-      font-size: 25px;
-      margin-bottom: 10px;
-    }
-
-    .gun h3 {
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .level {
-      display: inline-block;
-      margin-top: 9px;
-      padding: 4px 9px;
-      border-radius: 20px;
-      background: #21163b;
-      color: #c084fc;
-      font-size: 11px;
+    .card h3 {
+      margin-top: 12px;
+      color: white;
     }
 
     .gallery {
-      max-width: 1050px;
-      margin: auto;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
     }
 
-    .gallery-item {
-      height: 210px;
-      border-radius: 17px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #172033, #0d111d);
-      border: 1px solid #46516b;
-    }
-
-    .gallery-item img {
+    .gallery img {
       width: 100%;
-      height: 100%;
+      height: 230px;
       object-fit: cover;
-      border-radius: 17px;
-      display: block;
+      border-radius: 12px;
+      border: 1px solid #302052;
       transition: 0.3s;
     }
 
-    .gallery-item img:hover {
-      transform: scale(1.04);
+    .gallery img:hover {
+      transform: scale(1.03);
+    }
+
+    .empty {
+      text-align: center;
+      color: #999;
+      padding: 30px;
     }
 
     .contact {
       text-align: center;
-      padding: 65px 7%;
-      background: linear-gradient(135deg, #120b25, #080b14);
+      padding: 40px 20px;
+      background: #120d24;
+      margin-top: 30px;
     }
 
-    .contact p {
-      color: #9ca3af;
-      margin-top: 10px;
-    }
-
-    .contact-btn {
+    .contact a {
       display: inline-block;
-      margin-top: 22px;
-      padding: 14px 30px;
-      border-radius: 30px;
-      background: linear-gradient(135deg, #7c3aed, #9333ea);
+      margin-top: 15px;
+      padding: 12px 25px;
+      background: #8c52ff;
       color: white;
       text-decoration: none;
-      font-weight: bold;
+      border-radius: 25px;
     }
 
     footer {
-      padding: 25px;
       text-align: center;
-      color: #6b7280;
-      font-size: 13px;
-      border-top: 1px solid #20283a;
+      padding: 25px;
+      color: #888;
+      font-size: 14px;
       line-height: 1.7;
     }
 
-    @media (max-width: 800px) {
+    /* ADMIN */
 
-      .hero h2 {
-        font-size: 31px;
-      }
-
-      .x-suits {
-        grid-template-columns: 1fr;
-      }
-
-      .guns {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
+    .admin-box {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 25px;
+      background: #151022;
+      border: 1px solid #302052;
+      border-radius: 15px;
     }
 
-    @media (max-width: 450px) {
-
-      header h1 {
-        font-size: 22px;
-      }
-
-      .hero {
-        padding-top: 45px;
-      }
-
-      .guns {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding: 40px 5%;
-      }
-
+    .admin-box h2 {
+      text-align: center;
+      color: #b98cff;
+      margin-bottom: 20px;
     }
 
+    .admin-box input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #403060;
+      background: #0d0917;
+      color: white;
+    }
+
+    .admin-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 8px;
+      background: #8c52ff;
+      color: white;
+      cursor: pointer;
+    }
+
+    .admin-box button:hover {
+      background: #a56fff;
+    }
+
+    #adminDashboard,
+    #galleryManager,
+    #resetPasswordBox {
+      display: none;
+    }
+
+    #loginMessage,
+    #uploadMessage,
+    #resetMessage {
+      text-align: center;
+      margin-top: 12px;
+      color: #b98cff;
+    }
   </style>
-
 </head>
-
 
 <body>
 
-
-  <!-- HEADER -->
-
   <header>
-
     <h1>🎮 BGMI Gaming Showcase</h1>
-
-    <p>
-      Premium Collection • X-Suits • Gun Skins
-    </p>
-
+    <p>Gaming Profile • Skins • Achievements</p>
   </header>
 
-
-  <!-- HERO -->
-
   <div class="hero">
-
-    <div class="badge">
-      🔥 GAMING PROFILE SHOWCASE
-    </div>
-
-    <h2>
-      BGMI <span>Premium Account</span>
-    </h2>
-
-    <p class="hero-text">
-      Explore the featured gaming collection, rare X-Suits,
-      upgraded gun skins and memorable gameplay screenshots.
-    </p>
-
-
-    <!-- PROFILE -->
-
-    <div class="profile">
-
-      <div class="avatar">
-        🎮
-      </div>
-
-      <h3>
-        Gaming Profile
-      </h3>
-
-      <p class="profile-description">
-        Player Collection & Achievement Showcase
-      </p>
-
-
-      <!-- STATS -->
-
-      <div class="stats">
-
-        <div class="stat">
-
-          <div class="number">
-            79
-          </div>
-
-          <div class="label">
-            ⭐ Account Level
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="number">
-            60
-          </div>
-
-          <div class="label">
-            📦 Collection
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
+    <h2>Welcome to My BGMI Profile</h2>
+    <p>Explore my gaming collection and achievements.</p>
   </div>
 
+  <div class="stats">
+    <div class="stat-card">
+      <h3>79</h3>
+      <p>Account Level</p>
+    </div>
 
-  <!-- X SUITS -->
+    <div class="stat-card">
+      <h3>60</h3>
+      <p>Collection</p>
+    </div>
+  </div>
 
   <section>
+    <h2>🔥 X-Suits</h2>
 
-    <div class="section-title">
+    <div class="cards">
 
-      <h2>
-        👑 X-Suits
-      </h2>
-
-      <p>
-        Featured premium outfits
-      </p>
-
-    </div>
-
-
-    <div class="x-suits">
-
-      <div class="x-card">
-
-        <div class="x-icon">
-          👑
-        </div>
-
-        <h3>
-          Phoenixtra X-Suit
-        </h3>
-
-        <div class="stars">
-          ⭐⭐ 2-Star
-        </div>
-
-        <p>
-          Featured X-Suit
-        </p>
-
+      <div class="card">
+        <img src="images/xsuit1.jpg" alt="X-Suit">
+        <h3>X-Suit Collection</h3>
       </div>
 
-
-      <div class="x-card">
-
-        <div class="x-icon">
-          ⚡
-        </div>
-
-        <h3>
-          Dravion X-Suit
-        </h3>
-
-        <div class="stars">
-          ⭐ 1-Star
-        </div>
-
-        <p>
-          Featured X-Suit
-        </p>
-
-      </div>
-
-
-      <div class="x-card">
-
-        <div class="x-icon">
-          ❄️
-        </div>
-
-        <h3>
-          The Cryonix Wraith Set
-        </h3>
-
-        <div class="stars">
-          ✨ Futuristic Gilt
-        </div>
-
-        <p>
-          Featured Set
-        </p>
-
+      <div class="card">
+        <img src="images/xsuit2.jpg" alt="X-Suit">
+        <h3>Premium X-Suit</h3>
       </div>
 
     </div>
-
   </section>
-
-
-  <!-- GUN SKINS -->
 
   <section>
+    <h2>🔫 Gun Skins</h2>
 
-    <div class="section-title">
+    <div class="cards">
 
-      <h2>
-        🔫 Gun Skins
-      </h2>
-
-      <p>
-        Featured weapon collection
-      </p>
-
-    </div>
-
-
-    <div class="guns">
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>M416 Glacier</h3>
-        <span class="level">Lv.7</span>
+      <div class="card">
+        <img src="images/gun1.jpg" alt="Gun Skin">
+        <h3>Gun Skin</h3>
       </div>
 
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>UZI Savagery</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>Vector Ruby Tooth</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>Groza Splendid Battle</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>UMP45 Marine Evolution</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>Crossbow Circus of Screams</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>Thompson Violet Finesse</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>M24 Industry Edge</h3>
-        <span class="level">Lv.2</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>M16A4 Thornrose Dawn</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>SKS Graceful Trigger</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>Mk47 Patchmetal Bunny</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>Tomahawk Burning Godzilla</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>Mk14 Cuddly Nailoong</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>SCAR-L Chow Blaster</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>MP7 Candied Haunter</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>VSS Winter Patrol</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>DP-28 Rebel Roguefox</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>MP5K Retro Pixel</h3>
-        <span class="level">Lv.1</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>S1897 Splendid Assault</h3>
-        <span class="level">Lv.3</span>
-      </div>
-
-      <div class="gun">
-        <div class="gun-icon">🦋</div>
-        <h3>SLR Nautical Expert</h3>
-        <span class="level">Lv.2</span>
+      <div class="card">
+        <img src="images/gun2.jpg" alt="Gun Skin">
+        <h3>Premium Gun Skin</h3>
       </div>
 
     </div>
-
   </section>
 
-
-  <!-- GALLERY -->
+  <!-- PUBLIC GALLERY -->
 
   <section>
+    <h2>📸 Gallery</h2>
 
-    <div class="section-title">
-
-      <h2>
-        🖼️ Screenshots Gallery
-      </h2>
-
-      <p>
-        Gameplay & collection screenshots
-      </p>
-
+    <div id="gallery" class="gallery">
+      <div class="empty">Loading gallery...</div>
     </div>
-
-
-    <div
-      class="gallery"
-      id="gallery"
-    ></div>
-
   </section>
-
-
-  <!-- CONTACT -->
 
   <div class="contact">
+    <h2>📩 Interested?</h2>
+    <p>Contact me for more information.</p>
 
-    <h2>
-      📩 Contact / DM
-    </h2>
-
-    <p>
-      For showcase-related questions, feel free to get in touch.
-    </p>
-
-    <a
-      class="contact-btn"
-      href="mailto:yourmail@example.com"
-    >
-      Send Message
+    <a href="mailto:yourmail@example.com">
+      Contact
     </a>
+  </div>
+
+  <footer>
+    🔒 Showcase website only<br>
+    No login credentials • No account transfer • No buying/selling<br><br>
+    © 2026 BGMI Gaming Showcase
+  </footer>
+
+
+  <!-- ADMIN LOGIN -->
+
+  <div id="adminLogin" class="admin-box">
+
+    <h2>🔐 Admin Login</h2>
+
+    <input
+      type="email"
+      id="email"
+      placeholder="Email"
+    >
+
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+    >
+
+    <button id="loginButton">
+      Login
+    </button>
+
+    <button id="forgotButton">
+      Forgot Password
+    </button>
+
+    <p id="loginMessage"></p>
 
   </div>
 
 
-  <!-- FOOTER -->
+  <!-- ADMIN DASHBOARD -->
 
-  <footer>
+  <div id="adminDashboard" class="admin-box">
 
-    🔒 Showcase website only
+    <h2>⚙️ Admin Dashboard</h2>
 
-    <br>
+    <button id="galleryButton">
+      📸 Gallery Manager
+    </button>
 
-    No login credentials • No account transfer • No buying/selling
+    <button id="logoutButton">
+      Logout
+    </button>
 
-    <br><br>
+  </div>
 
-    © 2026 BGMI Gaming Showcase
 
-  </footer>
+  <!-- GALLERY MANAGER -->
+
+  <div id="galleryManager" class="admin-box">
+
+    <h2>📸 Gallery Manager</h2>
+
+    <input
+      type="file"
+      id="galleryImage"
+      accept="image/*"
+    >
+
+    <button id="uploadButton">
+      Upload Image
+    </button>
+
+    <p id="uploadMessage"></p>
+
+  </div>
+
+
+  <!-- RESET PASSWORD -->
+
+  <div id="resetPasswordBox" class="admin-box">
+
+    <h2>🔑 Reset Password</h2>
+
+    <input
+      type="password"
+      id="newPassword"
+      placeholder="New Password"
+    >
+
+    <button id="resetButton">
+      Update Password
+    </button>
+
+    <p id="resetMessage"></p>
+
+  </div>
 
 
   <!-- SUPABASE -->
@@ -744,6 +413,7 @@
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_AjbdaVNggShfRJmLFwn-cA_-TJ_-to0";
 
+
     const supabaseClient =
       window.supabase.createClient(
         SUPABASE_URL,
@@ -751,18 +421,17 @@
       );
 
 
-    /* LOAD GALLERY */
+    /* =========================
+       LOAD PUBLIC GALLERY
+    ========================= */
 
     async function loadGalleryImages() {
 
       const gallery =
         document.getElementById("gallery");
 
-      if (!gallery) {
-        return;
-      }
-
-      gallery.innerHTML = "";
+      gallery.innerHTML =
+        '<div class="empty">Loading gallery...</div>';
 
       const { data, error } =
         await supabaseClient.storage
@@ -778,13 +447,10 @@
 
       if (error) {
 
-        console.log(
-          "Gallery error:",
-          error
-        );
+        console.error("Gallery error:", error);
 
         gallery.innerHTML =
-          "<p style='color:#9ca3af;text-align:center;'>Gallery loading failed.</p>";
+          '<div class="empty">Gallery could not be loaded.</div>';
 
         return;
       }
@@ -793,99 +459,74 @@
       if (!data || data.length === 0) {
 
         gallery.innerHTML =
-          "<p style='color:#9ca3af;text-align:center;'>No screenshots uploaded yet.</p>";
+          '<div class="empty">No images uploaded yet.</div>';
 
         return;
       }
 
 
-      data.forEach(
-        function(file, index) {
-
-          if (!file.name) {
-            return;
-          }
+      gallery.innerHTML = "";
 
 
-          const item =
-            document.createElement("div");
+      data.forEach(file => {
 
-          item.className =
-            "gallery-item";
+        if (!file.name) return;
 
 
-          const img =
-            document.createElement("img");
+        const publicUrl =
+          supabaseClient.storage
+            .from("gaming-images")
+            .getPublicUrl(file.name)
+            .data.publicUrl;
 
 
-          const publicUrl =
-            supabaseClient.storage
-              .from("gaming-images")
-              .getPublicUrl(file.name)
-              .data.publicUrl;
+        const img =
+          document.createElement("img");
+
+        img.src = publicUrl;
+
+        img.alt = "BGMI Gallery Image";
+
+        img.loading = "lazy";
 
 
-          img.src =
-            publicUrl;
+        gallery.appendChild(img);
 
-          img.alt =
-            "BGMI Screenshot " +
-            (index + 1);
-
-
-          item.appendChild(img);
-
-          gallery.appendChild(item);
-
-        }
-      );
+      });
 
     }
 
 
-    /* ADMIN LOGIN */
+    /* =========================
+       ADMIN LOGIN
+    ========================= */
 
     async function loginAdmin() {
 
       const email =
-        document.getElementById("adminEmail").value.trim();
+        document.getElementById("email").value.trim();
 
       const password =
-        document.getElementById("adminPassword").value;
+        document.getElementById("password").value;
 
       const message =
         document.getElementById("loginMessage");
 
 
-      if (!email || !password) {
-
-        message.textContent =
-          "❌ Please enter email and password.";
-
-        return;
-      }
-
-
-      message.textContent =
-        "⏳ Logging in...";
+      message.textContent = "Logging in...";
 
 
       const { error } =
-        await supabaseClient.auth
-          .signInWithPassword({
-
-            email: email,
-
-            password: password
-
-          });
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
 
       if (error) {
 
         message.textContent =
-          "❌ Login failed: " +
-          error.message;
+          "❌ " + error.message;
 
         return;
       }
@@ -894,35 +535,23 @@
       message.textContent =
         "✅ Login successful!";
 
-
-      document.getElementById(
-        "adminLogin"
-      ).style.display = "none";
-
-
-      document.getElementById(
-        "adminDashboard"
-      ).style.display = "block";
-
     }
 
 
-    /* GALLERY UPLOAD */
+    /* =========================
+       UPLOAD IMAGE
+    ========================= */
 
     async function uploadGalleryImage() {
 
       const fileInput =
-        document.getElementById("galleryFile");
+        document.getElementById("galleryImage");
 
       const message =
-        document.getElementById("galleryMessage");
+        document.getElementById("uploadMessage");
 
 
-      const file =
-        fileInput.files[0];
-
-
-      if (!file) {
+      if (!fileInput.files.length) {
 
         message.textContent =
           "❌ Please select an image.";
@@ -931,30 +560,31 @@
       }
 
 
-      message.textContent =
-        "⏳ Uploading...";
+      const file =
+        fileInput.files[0];
 
 
       const fileName =
-        Date.now() +
-        "_" +
-        file.name;
+        Date.now() + "_" +
+        file.name.replace(/\s+/g, "_");
+
+
+      message.textContent =
+        "Uploading...";
 
 
       const { error } =
         await supabaseClient.storage
           .from("gaming-images")
-          .upload(
-            fileName,
-            file
-          );
+          .upload(fileName, file);
 
 
       if (error) {
 
+        console.error(error);
+
         message.textContent =
-          "❌ Upload failed: " +
-          error.message;
+          "❌ " + error.message;
 
         return;
       }
@@ -972,41 +602,46 @@
     }
 
 
-    /* PASSWORD RESET */
+    /* =========================
+       LOGOUT
+    ========================= */
 
-    async function updatePassword() {
+    async function logoutAdmin() {
 
-      const newPassword =
-        document.getElementById(
-          "newPassword"
-        ).value;
+      await supabaseClient.auth.signOut();
+
+      document.getElementById(
+        "adminDashboard"
+      ).style.display = "none";
+
+      document.getElementById(
+        "galleryManager"
+      ).style.display = "none";
+
+      document.getElementById(
+        "adminLogin"
+      ).style.display = "block";
+
+    }
 
 
-      const confirmPassword =
-        document.getElementById(
-          "confirmPassword"
-        ).value;
+    /* =========================
+       FORGOT PASSWORD
+    ========================= */
 
+    async function forgotPassword() {
+
+      const email =
+        document.getElementById("email").value.trim();
 
       const message =
-        document.getElementById(
-          "resetMessage"
-        );
+        document.getElementById("loginMessage");
 
 
-      if (newPassword !== confirmPassword) {
+      if (!email) {
 
         message.textContent =
-          "❌ Passwords do not match.";
-
-        return;
-      }
-
-
-      if (newPassword.length < 6) {
-
-        message.textContent =
-          "❌ Password must be at least 6 characters.";
+          "❌ Enter your email first.";
 
         return;
       }
@@ -1014,80 +649,109 @@
 
       const { error } =
         await supabaseClient.auth
-          .updateUser({
-
-            password:
-              newPassword
-
+          .resetPasswordForEmail(email, {
+            redirectTo:
+              "https://syamala1912-dangeti.github.io/gaming-account-showcase/"
           });
 
 
       if (error) {
 
         message.textContent =
-          "❌ " +
-          error.message;
+          "❌ " + error.message;
 
         return;
       }
 
 
       message.textContent =
-        "✅ Password updated successfully!";
+        "✅ Password reset email sent.";
 
     }
 
 
-    /* GALLERY BUTTON */
+    /* =========================
+       UPDATE PASSWORD
+    ========================= */
+
+    async function updatePassword() {
+
+      const password =
+        document.getElementById("newPassword").value;
+
+      const message =
+        document.getElementById("resetMessage");
+
+
+      if (!password) {
+
+        message.textContent =
+          "❌ Enter a new password.";
+
+        return;
+      }
+
+
+      const { error } =
+        await supabaseClient.auth.updateUser({
+          password: password
+        });
+
+
+      if (error) {
+
+        message.textContent =
+          "❌ " + error.message;
+
+        return;
+      }
+
+
+      message.textContent =
+        "✅ Password updated successfully.";
+
+    }
+
+
+    /* =========================
+       OPEN GALLERY MANAGER
+    ========================= */
 
     function openGalleryManager() {
 
-      const box =
-        document.getElementById(
-          "galleryManager"
-        );
-
-
-      if (
-        box.style.display === "none" ||
-        box.style.display === ""
-      ) {
-
-        box.style.display =
-          "block";
-
-      } else {
-
-        box.style.display =
-          "none";
-
-      }
+      document.getElementById(
+        "galleryManager"
+      ).style.display = "block";
 
     }
 
 
-    /* PASSWORD RECOVERY */
+    /* =========================
+       AUTH STATE
+    ========================= */
 
     supabaseClient.auth.onAuthStateChange(
-      function(event) {
+      (event, session) => {
 
-        if (
-          event === "PASSWORD_RECOVERY"
-        ) {
+        if (session) {
+
+          document.getElementById(
+            "adminDashboard"
+          ).style.display = "block";
 
           document.getElementById(
             "adminLogin"
           ).style.display = "none";
 
+        } else {
 
           document.getElementById(
             "adminDashboard"
           ).style.display = "none";
 
-
           document.getElementById(
-            "resetPasswordBox"
-          ).style.display = "block";
+            "galleryManager"
+          ).style.display = "none";
 
         }
 
@@ -1095,13 +759,39 @@
     );
 
 
-    /* BUTTON EVENTS */
+    /* =========================
+       BUTTON EVENTS
+    ========================= */
 
     document
       .getElementById("loginButton")
       .addEventListener(
         "click",
         loginAdmin
+      );
+
+
+    document
+      .getElementById("uploadButton")
+      .addEventListener(
+        "click",
+        uploadGalleryImage
+      );
+
+
+    document
+      .getElementById("logoutButton")
+      .addEventListener(
+        "click",
+        logoutAdmin
+      );
+
+
+    document
+      .getElementById("forgotButton")
+      .addEventListener(
+        "click",
+        forgotPassword
       );
 
 
@@ -1114,95 +804,39 @@
 
 
     document
-      .getElementById("uploadGalleryButton")
-      .addEventListener(
-        "click",
-        uploadGalleryImage
-      );
-
-
-    document
-      .getElementById("updatePasswordButton")
+      .getElementById("resetButton")
       .addEventListener(
         "click",
         updatePassword
       );
 
 
-    /* LOAD GALLERY ON PAGE OPEN */
+    /* =========================
+       PASSWORD RESET CHECK
+    ========================= */
+
+    const currentUrl =
+      window.location.href;
+
+    if (
+      currentUrl.includes("access_token") ||
+      currentUrl.includes("type=recovery")
+    ) {
+
+      document.getElementById(
+        "resetPasswordBox"
+      ).style.display = "block";
+
+    }
+
+
+    /* =========================
+       LOAD GALLERY
+    ========================= */
 
     loadGalleryImages();
 
   </script>
 
-
-  <!-- ADMIN LOGIN -->
-
-  <div
-    id="adminLogin"
-    style="
-      max-width:400px;
-      margin:40px auto;
-      padding:20px;
-      background:#171126;
-      border-radius:15px;
-    "
-  >
-
-    <h2>
-      🔐 Admin Login
-    </h2>
-
-
-    <input
-      id="adminEmail"
-      type="email"
-      placeholder="Admin Email"
-      style="
-        width:100%;
-        padding:12px;
-        margin:8px 0;
-      "
-    >
-
-
-    <input
-      id="adminPassword"
-      type="password"
-      placeholder="Password"
-      style="
-        width:100%;
-        padding:12px;
-        margin:8px 0;
-      "
-    >
-
-
-    <button
-      id="loginButton"
-      type="button"
-      style="
-        padding:12px 20px;
-      "
-    >
-      Login
-    </button>
-
-
-    <p id="loginMessage"></p>
-
-  </div>
-
-
-  <!-- ADMIN DASHBOARD -->
-
-  <div
-    id="adminDashboard"
-    style="
-      display:none;
-      max-width:900px;
-      margin:40px auto;
-      padding:25px;
-      background:#171126;
-      border:1px solid #46316c;
-      border-radius:20px;
+</body>
+</html>
