@@ -673,10 +673,12 @@
 
   </script>
 <!-- SUPABASE AUTH -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
   const SUPABASE_URL = "https://fikudwotxgkmdzwifkek.supabase.co";
+
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AjbdaVNggShfRJmLFwn-cA_-TJ_-to0";
 
   const supabaseClient = window.supabase.createClient(
@@ -684,8 +686,12 @@
     SUPABASE_PUBLISHABLE_KEY
   );
 </script>
+
+
 <!-- ADMIN LOGIN -->
+
 <div id="adminLogin" style="display:block; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;">
+
   <h2>🔐 Admin Login</h2>
 
   <input
@@ -702,37 +708,25 @@
     style="width:100%; padding:12px; margin:8px 0;"
   >
 
-  <button onclick="adminLogin()" style="padding:12px 20px;">
+  <button
+    id="loginButton"
+    type="button"
+    style="padding:12px 20px;"
+  >
     Login
   </button>
 
   <p id="loginMessage"></p>
+
 </div>
 
-<script>
-  async function adminLogin() {
-    const email = document.getElementById("adminEmail").value.trim();
-    const password = document.getElementById("adminPassword").value;
-    const message = document.getElementById("loginMessage");
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
-
-    if (error) {
-     message.textContent = "Login failed: " + error.message;
-      return;
-    }
-
-    message.textContent = "✅ Login successful!";
-    document.getElementById("adminLogin").style.display = "none";
-document.getElementById("adminDashboard").style.display = "block";
-  }
-</script>
 <!-- ADMIN DASHBOARD -->
 
-<div id="adminDashboard" style="display:none; max-width:900px; margin:40px auto; padding:25px; background:#171126; border:1px solid #46316c; border-radius:20px;">
+<div
+  id="adminDashboard"
+  style="display:none; max-width:900px; margin:40px auto; padding:25px; background:#171126; border:1px solid #46316c; border-radius:20px;"
+>
 
   <h2 style="text-align:center;">⚙️ Admin Dashboard</h2>
 
@@ -740,30 +734,57 @@ document.getElementById("adminDashboard").style.display = "block";
     Manage your gaming showcase
   </p>
 
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-top:25px;">
 
-    <button onclick="openGalleryManager()" style="padding:18px; border:0; border-radius:12px; background:#7c3aed; color:white; font-size:16px;">
-  🖼️ Manage Gallery
-</button>
+  <div
+    style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-top:25px;"
+  >
 
-    <button onclick="alert('Profile management coming next!')" style="padding:18px; border:0; border-radius:12px; background:#2563eb; color:white; font-size:16px;">
+    <button
+      id="galleryButton"
+      type="button"
+      style="padding:18px; border:0; border-radius:12px; background:#7c3aed; color:white; font-size:16px;"
+    >
+      🖼️ Manage Gallery
+    </button>
+
+
+    <button
+      type="button"
+      onclick="alert('Profile management coming next!')"
+      style="padding:18px; border:0; border-radius:12px; background:#2563eb; color:white; font-size:16px;"
+    >
       👤 Manage Profile
     </button>
 
-    <button onclick="alert('Gun skins management coming next!')" style="padding:18px; border:0; border-radius:12px; background:#9333ea; color:white; font-size:16px;">
+
+    <button
+      type="button"
+      onclick="alert('Gun skins management coming next!')"
+      style="padding:18px; border:0; border-radius:12px; background:#9333ea; color:white; font-size:16px;"
+    >
       🔫 Manage Gun Skins
     </button>
 
-    <button onclick="alert('X-Suits management coming next!')" style="padding:18px; border:0; border-radius:12px; background:#db2777; color:white; font-size:16px;">
+
+    <button
+      type="button"
+      onclick="alert('X-Suits management coming next!')"
+      style="padding:18px; border:0; border-radius:12px; background:#db2777; color:white; font-size:16px;"
+    >
       👑 Manage X-Suits
     </button>
 
   </div>
 
-</div>  
+</div>
+
+
 <!-- GALLERY MANAGER -->
 
-<div id="galleryManager" style="display:none; margin:25px auto; max-width:900px; padding:20px; background:#0f0a1c; border:1px solid #46316c; border-radius:15px;">
+<div
+  id="galleryManager"
+  style="display:none; max-width:900px; margin:25px auto; padding:20px; background:#0f0a1c; border:1px solid #46316c; border-radius:15px;"
+>
 
   <h3>🖼️ Gallery Manager</h3>
 
@@ -777,8 +798,10 @@ document.getElementById("adminDashboard").style.display = "block";
   <br>
 
   <button
-    onclick="uploadGalleryImage()"
-    style="padding:12px 20px; border:0; border-radius:10px; background:#22c55e; color:white;">
+    id="uploadGalleryButton"
+    type="button"
+    style="padding:12px 20px; border:0; border-radius:10px; background:#22c55e; color:white;"
+  >
     ⬆️ Upload Image
   </button>
 
@@ -786,47 +809,14 @@ document.getElementById("adminDashboard").style.display = "block";
 
 </div>
 
-<script>
-  function openGalleryManager() {
-    const box = document.getElementById("galleryManager");
 
-    if (box.style.display === "none") {
-      box.style.display = "block";
-    } else {
-      box.style.display = "none";
-    }
-  }
-
-  async function uploadGalleryImage() {
-    const fileInput = document.getElementById("galleryFile");
-    const message = document.getElementById("galleryMessage");
-
-    const file = fileInput.files[0];
-
-    if (!file) {
-      message.textContent = "❌ Please select an image.";
-      return;
-    }
-
-    message.textContent = "⏳ Uploading...";
-
-    const fileName = Date.now() + "_" + file.name;
-
-    const { error } = await supabaseClient.storage
-      .from("gaming-images")
-      .upload(fileName, file);
-
-    if (error) {
-      message.textContent = "❌ Upload failed: " + error.message;
-      return;
-    }
-
-    message.textContent = "✅ Image uploaded successfully!";
-    fileInput.value = "";
-  }
-</script>  
 <!-- RESET PASSWORD -->
-<div id="resetPasswordBox" style="display:none; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;">
+
+<div
+  id="resetPasswordBox"
+  style="display:none; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;"
+>
+
   <h2>🔑 Set New Password</h2>
 
   <input
@@ -843,47 +833,226 @@ document.getElementById("adminDashboard").style.display = "block";
     style="width:100%; padding:12px; margin:8px 0;"
   >
 
-  <button onclick="updatePassword()" style="padding:12px 20px;">
+  <button
+    id="updatePasswordButton"
+    type="button"
+    style="padding:12px 20px;"
+  >
     Update Password
   </button>
 
   <p id="resetMessage"></p>
+
 </div>
 
+
+<!-- ADMIN FUNCTIONS -->
+
 <script>
-  supabaseClient.auth.onAuthStateChange(async (event, session) => {
-    if (event === "PASSWORD_RECOVERY") {
-      document.getElementById("adminLogin").style.display = "none";
-      document.getElementById("resetPasswordBox").style.display = "block";
-    }
-  });
 
-  async function updatePassword() {
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    const message = document.getElementById("resetMessage");
+  /* LOGIN */
 
-    if (newPassword !== confirmPassword) {
-      message.textContent = "❌ Passwords do not match.";
+  document.getElementById("loginButton").addEventListener("click", async function () {
+
+    const email =
+      document.getElementById("adminEmail").value.trim();
+
+    const password =
+      document.getElementById("adminPassword").value;
+
+    const message =
+      document.getElementById("loginMessage");
+
+
+    if (!email || !password) {
+
+      message.textContent =
+        "❌ Please enter email and password.";
+
       return;
     }
 
-    if (newPassword.length < 6) {
-      message.textContent = "❌ Password must be at least 6 characters.";
-      return;
-    }
 
-    const { error } = await supabaseClient.auth.updateUser({
-      password: newPassword
-    });
+    message.textContent = "⏳ Logging in...";
+
+
+    const { error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
 
     if (error) {
-      message.textContent = "❌ " + error.message;
+
+      message.textContent =
+        "❌ Login failed: " + error.message;
+
       return;
     }
 
-    message.textContent = "✅ Password updated successfully!";
-  }
+
+    message.textContent =
+      "✅ Login successful!";
+
+
+    document.getElementById("adminLogin").style.display =
+      "none";
+
+    document.getElementById("adminDashboard").style.display =
+      "block";
+
+  });
+
+
+  /* GALLERY BUTTON */
+
+  document.getElementById("galleryButton").addEventListener("click", function () {
+
+    const box =
+      document.getElementById("galleryManager");
+
+
+    if (box.style.display === "none") {
+
+      box.style.display = "block";
+
+    } else {
+
+      box.style.display = "none";
+
+    }
+
+  });
+
+
+  /* GALLERY UPLOAD */
+
+  document.getElementById("uploadGalleryButton").addEventListener("click", async function () {
+
+    const fileInput =
+      document.getElementById("galleryFile");
+
+    const message =
+      document.getElementById("galleryMessage");
+
+    const file =
+      fileInput.files[0];
+
+
+    if (!file) {
+
+      message.textContent =
+        "❌ Please select an image.";
+
+      return;
+    }
+
+
+    message.textContent =
+      "⏳ Uploading...";
+
+
+    const fileName =
+      Date.now() + "_" + file.name;
+
+
+    const { error } =
+      await supabaseClient.storage
+        .from("gaming-images")
+        .upload(fileName, file);
+
+
+    if (error) {
+
+      message.textContent =
+        "❌ Upload failed: " + error.message;
+
+      return;
+    }
+
+
+    message.textContent =
+      "✅ Image uploaded successfully!";
+
+    fileInput.value = "";
+
+  });
+
+
+  /* PASSWORD RECOVERY */
+
+  supabaseClient.auth.onAuthStateChange(function (event, session) {
+
+    if (event === "PASSWORD_RECOVERY") {
+
+      document.getElementById("adminLogin").style.display =
+        "none";
+
+      document.getElementById("adminDashboard").style.display =
+        "none";
+
+      document.getElementById("resetPasswordBox").style.display =
+        "block";
+
+    }
+
+  });
+
+
+  /* UPDATE PASSWORD */
+
+  document.getElementById("updatePasswordButton").addEventListener("click", async function () {
+
+    const newPassword =
+      document.getElementById("newPassword").value;
+
+    const confirmPassword =
+      document.getElementById("confirmPassword").value;
+
+    const message =
+      document.getElementById("resetMessage");
+
+
+    if (newPassword !== confirmPassword) {
+
+      message.textContent =
+        "❌ Passwords do not match.";
+
+      return;
+    }
+
+
+    if (newPassword.length < 6) {
+
+      message.textContent =
+        "❌ Password must be at least 6 characters.";
+
+      return;
+    }
+
+
+    const { error } =
+      await supabaseClient.auth.updateUser({
+        password: newPassword
+      });
+
+
+    if (error) {
+
+      message.textContent =
+        "❌ " + error.message;
+
+      return;
+    }
+
+
+    message.textContent =
+      "✅ Password updated successfully!";
+
+  });
+
 </script>
+
 </body>
 </html>
