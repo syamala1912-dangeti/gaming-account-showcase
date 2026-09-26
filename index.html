@@ -684,26 +684,46 @@ async function loadGalleryImages() {
 }
 
 loadGalleryImages();
-</script>
+<script>
+async function loadGalleryImages() {
+  const gallery = document.getElementById("gallery");
 
-    const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
 
-    galleryImages.forEach((image, index) => {
-
-      const item = document.createElement("div");
-      item.className = "gallery-item";
-
-      const img = document.createElement("img");
-
-      img.src = "images/" + image;
-      img.alt = "BGMI Screenshot " + (index + 1);
-
-      item.appendChild(img);
-      gallery.appendChild(item);
-
+  const { data, error } = await supabaseClient.storage
+    .from("gaming-images")
+    .list("", {
+      limit: 100,
+      sortBy: {
+        column: "name",
+        order: "desc"
+      }
     });
 
-  </script>
+  if (error) {
+    console.log("Gallery error:", error);
+    return;
+  }
+
+  data.forEach((file, index) => {
+    const item = document.createElement("div");
+    item.className = "gallery-item";
+
+    const img = document.createElement("img");
+
+    img.src = supabaseClient.storage
+      .from("gaming-images")
+      .getPublicUrl(file.name).data.publicUrl;
+
+    img.alt = "BGMI Screenshot " + (index + 1);
+
+    item.appendChild(img);
+    gallery.appendChild(item);
+  });
+}
+
+loadGalleryImages();
+</script>
 <!-- SUPABASE AUTH -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
