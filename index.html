@@ -726,8 +726,41 @@
     }
 
     message.textContent = "✅ Login successful!";
+    document.getElementById("adminLogin").style.display = "none";
+document.getElementById("adminDashboard").style.display = "block";
   }
 </script>
+<!-- ADMIN DASHBOARD -->
+
+<div id="adminDashboard" style="display:none; max-width:900px; margin:40px auto; padding:25px; background:#171126; border:1px solid #46316c; border-radius:20px;">
+
+  <h2 style="text-align:center;">⚙️ Admin Dashboard</h2>
+
+  <p style="text-align:center; color:#9ca3af; margin-top:8px;">
+    Manage your gaming showcase
+  </p>
+
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-top:25px;">
+
+    <button onclick="alert('Gallery management coming next!')" style="padding:18px; border:0; border-radius:12px; background:#7c3aed; color:white; font-size:16px;">
+      🖼️ Manage Gallery
+    </button>
+
+    <button onclick="alert('Profile management coming next!')" style="padding:18px; border:0; border-radius:12px; background:#2563eb; color:white; font-size:16px;">
+      👤 Manage Profile
+    </button>
+
+    <button onclick="alert('Gun skins management coming next!')" style="padding:18px; border:0; border-radius:12px; background:#9333ea; color:white; font-size:16px;">
+      🔫 Manage Gun Skins
+    </button>
+
+    <button onclick="alert('X-Suits management coming next!')" style="padding:18px; border:0; border-radius:12px; background:#db2777; color:white; font-size:16px;">
+      👑 Manage X-Suits
+    </button>
+
+  </div>
+
+</div>  
 <!-- RESET PASSWORD -->
 <div id="resetPasswordBox" style="display:none; max-width:400px; margin:40px auto; padding:20px; background:#171126; border-radius:15px;">
   <h2>🔑 Set New Password</h2>
