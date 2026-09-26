@@ -52,6 +52,14 @@
       color: #c8b8e8;
     }
 
+    .profile-name {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: #b98cff;
+      margin-top: 25px;
+    }
+
     .stats {
       display: flex;
       justify-content: center;
@@ -209,24 +217,17 @@
       background: #a56fff;
     }
 
-#adminDashboard,
-#galleryManager,
-#resetPasswordBox,
-#profileEditor {
-  display: none;
-}
-
-.profile-name {
-  text-align: center;
-  font-size: 26px;
-  font-weight: bold;
-  color: #b98cff;
-  margin-top: 25px;
-}
+    #adminDashboard,
+    #galleryManager,
+    #resetPasswordBox,
+    #profileEditor {
+      display: none;
+    }
 
     #loginMessage,
     #uploadMessage,
-    #resetMessage {
+    #resetMessage,
+    #profileMessage {
       text-align: center;
       margin-top: 12px;
       color: #b98cff;
@@ -236,35 +237,44 @@
 
 <body>
 
+  <!-- HEADER -->
+
   <header>
     <h1>🎮 BGMI Gaming Showcase</h1>
     <p>Gaming Profile • Skins • Achievements</p>
   </header>
+
+
+  <!-- HERO -->
 
   <div class="hero">
     <h2>Welcome to My BGMI Profile</h2>
     <p>Explore my gaming collection and achievements.</p>
   </div>
 
+
+  <!-- PROFILE -->
+
   <div class="profile-name" id="playerName">
-  BGMI Player
-</div>
-
-<div class="stats">
-
-  <div class="stat-card">
-    <h3 id="accountLevel">79</h3>
-    <p>Account Level</p>
+    BGMI Player
   </div>
 
-  <div class="stat-card">
-    <h3 id="collectionCount">60</h3>
-    <p>Collection</p>
+  <div class="stats">
+
+    <div class="stat-card">
+      <h3 id="accountLevel">79</h3>
+      <p>Account Level</p>
+    </div>
+
+    <div class="stat-card">
+      <h3 id="collectionCount">60</h3>
+      <p>Collection</p>
+    </div>
+
   </div>
 
-</div>
 
-    
+  <!-- X-SUITS -->
 
   <section>
     <h2>🔥 X-Suits</h2>
@@ -284,6 +294,9 @@
     </div>
   </section>
 
+
+  <!-- GUN SKINS -->
+
   <section>
     <h2>🔫 Gun Skins</h2>
 
@@ -302,6 +315,7 @@
     </div>
   </section>
 
+
   <!-- PUBLIC GALLERY -->
 
   <section>
@@ -312,6 +326,9 @@
     </div>
   </section>
 
+
+  <!-- CONTACT -->
+
   <div class="contact">
     <h2>📩 Interested?</h2>
     <p>Contact me for more information.</p>
@@ -321,6 +338,9 @@
     </a>
   </div>
 
+
+  <!-- FOOTER -->
+
   <footer>
     🔒 Showcase website only<br>
     No login credentials • No account transfer • No buying/selling<br><br>
@@ -329,7 +349,7 @@
 
 
   <!-- ADMIN LOGIN -->
- 
+
   <div id="adminLogin" class="admin-box">
 
     <h2>🔐 Admin Login</h2>
@@ -364,35 +384,41 @@
   <div id="adminDashboard" class="admin-box">
 
     <h2>⚙️ Admin Dashboard</h2>
+
+
+    <!-- PROFILE EDITOR -->
+
     <div id="profileEditor" class="admin-box">
 
-  <h2>👤 Edit Profile</h2>
+      <h2>👤 Edit Profile</h2>
 
-  <input
-    type="text"
-    id="profilePlayerName"
-    placeholder="Player Name"
-  >
+      <input
+        type="text"
+        id="profilePlayerName"
+        placeholder="Player Name"
+      >
 
-  <input
-    type="number"
-    id="profileAccountLevel"
-    placeholder="Account Level"
-  >
+      <input
+        type="number"
+        id="profileAccountLevel"
+        placeholder="Account Level"
+      >
 
-  <input
-    type="number"
-    id="profileCollection"
-    placeholder="Collection Count"
-  >
+      <input
+        type="number"
+        id="profileCollection"
+        placeholder="Collection Count"
+      >
 
-  <button id="saveProfileButton">
-    Save Profile
-  </button>
+      <button id="saveProfileButton">
+        Save Profile
+      </button>
 
-  <p id="profileMessage"></p>
+      <p id="profileMessage"></p>
 
-</div>
+    </div>
+
+
     <button id="galleryButton">
       📸 Gallery Manager
     </button>
@@ -469,24 +495,7 @@
     /* =========================
        LOAD PUBLIC GALLERY
     ========================= */
-     <!-- SUPABASE -->
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-
-    const SUPABASE_URL =
-      "https://fikudwotxgkmdzwifkek.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_AjbdaVNggShfRJmLFwn-cA_-TJ_-to0";
-
-
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
     async function loadGalleryImages() {
 
       const gallery =
@@ -494,6 +503,7 @@
 
       gallery.innerHTML =
         '<div class="empty">Loading gallery...</div>';
+
 
       const { data, error } =
         await supabaseClient.storage
@@ -546,15 +556,151 @@
           document.createElement("img");
 
         img.src = publicUrl;
-
         img.alt = "BGMI Gallery Image";
-
         img.loading = "lazy";
-
 
         gallery.appendChild(img);
 
       });
+
+    }
+
+
+    /* =========================
+       LOAD PROFILE
+    ========================= */
+
+    async function loadProfile() {
+
+      const { data, error } =
+        await supabaseClient
+          .from("site_profile")
+          .select("*")
+          .eq("id", 1)
+          .single();
+
+
+      if (error) {
+
+        console.error("Profile error:", error);
+
+        return;
+      }
+
+
+      document.getElementById(
+        "playerName"
+      ).textContent = data.player_name;
+
+
+      document.getElementById(
+        "accountLevel"
+      ).textContent = data.account_level;
+
+
+      document.getElementById(
+        "collectionCount"
+      ).textContent = data.collection_count;
+
+
+      document.getElementById(
+        "profilePlayerName"
+      ).value = data.player_name;
+
+
+      document.getElementById(
+        "profileAccountLevel"
+      ).value = data.account_level;
+
+
+      document.getElementById(
+        "profileCollection"
+      ).value = data.collection_count;
+
+    }
+
+
+    /* =========================
+       SAVE PROFILE
+    ========================= */
+
+    async function saveProfile() {
+
+      const playerName =
+        document.getElementById(
+          "profilePlayerName"
+        ).value.trim();
+
+
+      const accountLevel =
+        Number(
+          document.getElementById(
+            "profileAccountLevel"
+          ).value
+        );
+
+
+      const collectionCount =
+        Number(
+          document.getElementById(
+            "profileCollection"
+          ).value
+        );
+
+
+      const message =
+        document.getElementById(
+          "profileMessage"
+        );
+
+
+      if (
+        !playerName ||
+        !accountLevel ||
+        !collectionCount
+      ) {
+
+        message.textContent =
+          "❌ Please enter all details.";
+
+        return;
+      }
+
+
+      message.textContent =
+        "Saving...";
+
+
+      const { error } =
+        await supabaseClient
+          .from("site_profile")
+          .update({
+            player_name: playerName,
+            account_level: accountLevel,
+            collection_count: collectionCount
+          })
+          .eq("id", 1);
+
+
+      if (error) {
+
+        console.error(
+          "Profile update error:",
+          error
+        );
+
+        message.textContent =
+          "❌ " + error.message;
+
+        return;
+      }
+
+
+      message.textContent =
+        "✅ Profile updated successfully!";
+
+
+      await loadProfile();
 
     }
 
@@ -566,23 +712,33 @@
     async function loginAdmin() {
 
       const email =
-        document.getElementById("email").value.trim();
+        document.getElementById(
+          "email"
+        ).value.trim();
+
 
       const password =
-        document.getElementById("password").value;
+        document.getElementById(
+          "password"
+        ).value;
+
 
       const message =
-        document.getElementById("loginMessage");
+        document.getElementById(
+          "loginMessage"
+        );
 
 
-      message.textContent = "Logging in...";
+      message.textContent =
+        "Logging in...";
 
 
       const { error } =
-        await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
+        await supabaseClient.auth
+          .signInWithPassword({
+            email: email,
+            password: password
+          });
 
 
       if (error) {
@@ -607,10 +763,15 @@
     async function uploadGalleryImage() {
 
       const fileInput =
-        document.getElementById("galleryImage");
+        document.getElementById(
+          "galleryImage"
+        );
+
 
       const message =
-        document.getElementById("uploadMessage");
+        document.getElementById(
+          "uploadMessage"
+        );
 
 
       if (!fileInput.files.length) {
@@ -628,7 +789,10 @@
 
       const fileName =
         Date.now() + "_" +
-        file.name.replace(/\s+/g, "_");
+        file.name.replace(
+          /\s+/g,
+          "_"
+        );
 
 
       message.textContent =
@@ -638,7 +802,10 @@
       const { error } =
         await supabaseClient.storage
           .from("gaming-images")
-          .upload(fileName, file);
+          .upload(
+            fileName,
+            file
+          );
 
 
       if (error) {
@@ -672,18 +839,6 @@
 
       await supabaseClient.auth.signOut();
 
-      document.getElementById(
-        "adminDashboard"
-      ).style.display = "none";
-
-      document.getElementById(
-        "galleryManager"
-      ).style.display = "none";
-
-      document.getElementById(
-        "adminLogin"
-      ).style.display = "block";
-
     }
 
 
@@ -694,10 +849,15 @@
     async function forgotPassword() {
 
       const email =
-        document.getElementById("email").value.trim();
+        document.getElementById(
+          "email"
+        ).value.trim();
+
 
       const message =
-        document.getElementById("loginMessage");
+        document.getElementById(
+          "loginMessage"
+        );
 
 
       if (!email) {
@@ -711,10 +871,13 @@
 
       const { error } =
         await supabaseClient.auth
-          .resetPasswordForEmail(email, {
-            redirectTo:
-              "https://syamala1912-dangeti.github.io/gaming-account-showcase/"
-          });
+          .resetPasswordForEmail(
+            email,
+            {
+              redirectTo:
+                "https://syamala1912-dangeti.github.io/gaming-account-showcase/"
+            }
+          );
 
 
       if (error) {
@@ -739,10 +902,15 @@
     async function updatePassword() {
 
       const password =
-        document.getElementById("newPassword").value;
+        document.getElementById(
+          "newPassword"
+        ).value;
+
 
       const message =
-        document.getElementById("resetMessage");
+        document.getElementById(
+          "resetMessage"
+        );
 
 
       if (!password) {
@@ -755,9 +923,10 @@
 
 
       const { error } =
-        await supabaseClient.auth.updateUser({
-          password: password
-        });
+        await supabaseClient.auth
+          .updateUser({
+            password: password
+          });
 
 
       if (error) {
@@ -796,27 +965,41 @@
       (event, session) => {
 
         if (session) {
-          document.getElementById("profileEditor").style.display = "block";
 
           document.getElementById(
             "adminDashboard"
           ).style.display = "block";
 
+
           document.getElementById(
             "adminLogin"
           ).style.display = "none";
-         
+
+
+          document.getElementById(
+            "profileEditor"
+          ).style.display = "block";
+
         } else {
 
           document.getElementById(
             "adminDashboard"
           ).style.display = "none";
 
+
           document.getElementById(
             "galleryManager"
           ).style.display = "none";
 
-          document.getElementById("profileEditor").style.display = "none";
+
+          document.getElementById(
+            "profileEditor"
+          ).style.display = "none";
+
+
+          document.getElementById(
+            "adminLogin"
+          ).style.display = "block";
 
         }
 
@@ -827,17 +1010,21 @@
     /* =========================
        BUTTON EVENTS
     ========================= */
+
     document
-  .getElementById("saveProfileButton")
-  .addEventListener(
-    "click",
-    saveProfile
-  );
-    loadGalleryImages();
-loadProfile();
-    
+      .getElementById(
+        "saveProfileButton"
+      )
+      .addEventListener(
+        "click",
+        saveProfile
+      );
+
+
     document
-      .getElementById("loginButton")
+      .getElementById(
+        "loginButton"
+      )
       .addEventListener(
         "click",
         loginAdmin
@@ -845,7 +1032,9 @@ loadProfile();
 
 
     document
-      .getElementById("uploadButton")
+      .getElementById(
+        "uploadButton"
+      )
       .addEventListener(
         "click",
         uploadGalleryImage
@@ -853,7 +1042,9 @@ loadProfile();
 
 
     document
-      .getElementById("logoutButton")
+      .getElementById(
+        "logoutButton"
+      )
       .addEventListener(
         "click",
         logoutAdmin
@@ -861,7 +1052,9 @@ loadProfile();
 
 
     document
-      .getElementById("forgotButton")
+      .getElementById(
+        "forgotButton"
+      )
       .addEventListener(
         "click",
         forgotPassword
@@ -869,7 +1062,9 @@ loadProfile();
 
 
     document
-      .getElementById("galleryButton")
+      .getElementById(
+        "galleryButton"
+      )
       .addEventListener(
         "click",
         openGalleryManager
@@ -877,7 +1072,9 @@ loadProfile();
 
 
     document
-      .getElementById("resetButton")
+      .getElementById(
+        "resetButton"
+      )
       .addEventListener(
         "click",
         updatePassword
@@ -891,9 +1088,14 @@ loadProfile();
     const currentUrl =
       window.location.href;
 
+
     if (
-      currentUrl.includes("access_token") ||
-      currentUrl.includes("type=recovery")
+      currentUrl.includes(
+        "access_token"
+      ) ||
+      currentUrl.includes(
+        "type=recovery"
+      )
     ) {
 
       document.getElementById(
@@ -904,10 +1106,12 @@ loadProfile();
 
 
     /* =========================
-       LOAD GALLERY
+       INITIAL LOAD
     ========================= */
 
     loadGalleryImages();
+
+    loadProfile();
 
   </script>
 
