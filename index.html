@@ -396,23 +396,30 @@
 
       <p id="profileMessage"></p>
 
-    </div>
-    <div id="xSuitEditor" class="admin-box">
+   <div id="xSuitEditor" class="admin-box">
 
-  <h2>🔥 Edit X-Suits</h2>
+  <h2>🔥 Add Multiple X-Suits</h2>
 
-  <input type="text" id="xSuitName" placeholder="X-Suit Name">
+  <input
+    type="file"
+    id="xSuitImages"
+    accept="image/*"
+    multiple
+  >
 
-  <input type="text" id="xSuitImage" placeholder="Image URL">
+  <textarea
+    id="xSuitNames"
+    placeholder="Enter X-Suit names, one per line"
+    rows="6"
+  ></textarea>
 
-  <button id="saveXSuitButton">
-    Add X-Suit
+  <button id="saveXSuitsButton">
+    Add X-Suits
   </button>
 
   <p id="xSuitMessage"></p>
 
 </div>
-
     <div id="gunSkinEditor" class="admin-box">
 
   <h2>🔫 Edit Gun Skins</h2>
@@ -811,86 +818,89 @@
     }
 
    
-async function saveXSuit() {
+async function saveXSuits() {
 
-  const name =
-    document.getElementById("xSuitName").value.trim();
+  const files =
+    document.getElementById("xSuitImages").files;
 
-  const imageUrl =
-    document.getElementById("xSuitImage").value.trim();
+  const names =
+    document.getElementById("xSuitNames").value
+      .split("\n")
+      .map(name => name.trim())
+      .filter(name => name !== "");
 
   const message =
     document.getElementById("xSuitMessage");
 
-  if (!name || !imageUrl) {
-    message.textContent = "❌ Please enter X-Suit name and image URL.";
-    return;
-  }
-
-  message.textContent = "Saving...";
-
-  const { error } =
-    await supabaseClient
-      .from("x_suits")
-      .insert({
-        name: name,
-        image_url: imageUrl
-      });
-
-  if (error) {
-    console.error("X-Suit error:", error);
-    message.textContent = "❌ " + error.message;
-    return;
-  }
-
-  message.textContent = "✅ X-Suit added successfully!";
-
-  document.getElementById("xSuitName").value = "";
-  document.getElementById("xSuitImage").value = "";
-}
-
-  async function saveGunSkin() {
-
-  const name =
-    document.getElementById("gunSkinName").value.trim();
-
-  const imageUrl =
-    document.getElementById("gunSkinImage").value.trim();
-
-  const message =
-    document.getElementById("gunSkinMessage");
-
-  if (!name || !imageUrl) {
+  if (files.length === 0) {
     message.textContent =
-      "❌ Please enter Gun Skin name and image URL.";
+      "❌ Please select X-Suit images.";
     return;
   }
 
-  message.textContent = "Saving...";
-
-  const { error } =
-    await supabaseClient
-      .from("gun_skins")
-      .insert({
-        name: name,
-        image_url: imageUrl
-      });
-
-  if (error) {
-    console.error("Gun Skin error:", error);
+  if (files.length !== names.length) {
     message.textContent =
-      "❌ " + error.message;
+      "❌ Images count and names count must be the same.";
     return;
+  }
+
+  message.textContent = "Uploading X-Suits...";
+
+  for (let i = 0; i < files.length; i++) {
+
+    const file = files[i];
+
+    const fileName =
+      Date.now() + "_" + file.name;
+
+    const { error: uploadError } =
+      await supabaseClient
+        .storage
+        .from("gaming-images")
+        .upload(fileName, file);
+
+    if (uploadError) {
+      console.error(uploadError);
+      message.textContent =
+        "❌ Image upload failed.";
+      return;
+    }
+
+    const { data: urlData } =
+      supabaseClient
+        .storage
+        .from("gaming-images")
+        .getPublicUrl(fileName);
+
+    const imageUrl =
+      urlData.publicUrl;
+
+    const { error: insertError } =
+      await supabaseClient
+        .from("x_suits")
+        .insert({
+          name: names[i],
+          image_url: imageUrl
+        });
+
+    if (insertError) {
+      console.error(insertError);
+      message.textContent =
+        "❌ X-Suit save failed.";
+      return;
+    }
   }
 
   message.textContent =
-    "✅ Gun Skin added successfully!";
+    "✅ All X-Suits added successfully!";
 
-  document.getElementById("gunSkinName").value = "";
-  document.getElementById("gunSkinImage").value = "";
+  document.getElementById("xSuitImages").value = "";
+  document.getElementById("xSuitNames").value = "";
+
+  await loadXSuits();
 }
 
-
+    
     /* =========================
        ADMIN LOGIN
     ========================= */
@@ -1207,10 +1217,10 @@ async function saveXSuit() {
       );
 
     document
-  .getElementById("saveXSuitButton")
+  .getElementById("saveXSuitsButton")
   .addEventListener(
     "click",
-    saveXSuit
+    saveXSuits
   );
 
    document
