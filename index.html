@@ -743,14 +743,20 @@
     return;
   }
 
-  const { error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("x_suits")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .select();
 
   if (error) {
     console.error("Delete X-Suit error:", error);
-    alert("❌ X-Suit delete failed.");
+    alert("Delete failed: " + error.message);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    alert("❌ X-Suit was not deleted. Check Supabase DELETE policy.");
     return;
   }
 
@@ -759,7 +765,6 @@
   await loadXSuits();
   await loadXSuitAdminList();
 }
-
     async function editXSuit(id, oldName) {
 
   const newName = prompt("Enter new X-Suit name:", oldName);
