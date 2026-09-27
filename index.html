@@ -288,22 +288,12 @@
   <!-- GUN SKINS -->
 
   <section>
-    <h2>🔫 Gun Skins</h2>
+  <h2>🔫 Gun Skins</h2>
 
-    <div class="cards">
-
-      <div class="card">
-        <img src="images/gun1.jpg" alt="Gun Skin">
-        <h3>Gun Skin</h3>
-      </div>
-
-      <div class="card">
-        <img src="images/gun2.jpg" alt="Gun Skin">
-        <h3>Premium Gun Skin</h3>
-      </div>
-
-    </div>
-  </section>
+  <div class="cards" id="gunSkinCards">
+    <div class="empty">Loading Gun Skins...</div>
+  </div>
+</section>
 
 
   <!-- PUBLIC GALLERY -->
@@ -420,6 +410,30 @@
   </button>
 
   <p id="xSuitMessage"></p>
+
+</div>
+
+    <div id="gunSkinEditor" class="admin-box">
+
+  <h2>🔫 Edit Gun Skins</h2>
+
+  <input
+    type="text"
+    id="gunSkinName"
+    placeholder="Gun Skin Name"
+  >
+
+  <input
+    type="text"
+    id="gunSkinImage"
+    placeholder="Image URL"
+  >
+
+  <button id="saveGunSkinButton">
+    Add Gun Skin
+  </button>
+
+  <p id="gunSkinMessage"></p>
 
 </div>
 
@@ -668,6 +682,49 @@
   });
 }
 
+    async function loadGunSkins() {
+
+  const container =
+    document.getElementById("gunSkinCards");
+
+  container.innerHTML =
+    '<div class="empty">Loading Gun Skins...</div>';
+
+  const { data, error } =
+    await supabaseClient
+      .from("gun_skins")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error("Gun Skins error:", error);
+    container.innerHTML =
+      '<div class="empty">Gun Skins could not be loaded.</div>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML =
+      '<div class="empty">No Gun Skins added yet.</div>';
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(skin => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="${skin.image_url}" alt="${skin.name}">
+      <h3>${skin.name}</h3>
+    `;
+
+    container.appendChild(card);
+
+  });
+}
 
     /* =========================
        SAVE PROFILE
@@ -790,6 +847,47 @@ async function saveXSuit() {
 
   document.getElementById("xSuitName").value = "";
   document.getElementById("xSuitImage").value = "";
+}
+
+  async function saveGunSkin() {
+
+  const name =
+    document.getElementById("gunSkinName").value.trim();
+
+  const imageUrl =
+    document.getElementById("gunSkinImage").value.trim();
+
+  const message =
+    document.getElementById("gunSkinMessage");
+
+  if (!name || !imageUrl) {
+    message.textContent =
+      "❌ Please enter Gun Skin name and image URL.";
+    return;
+  }
+
+  message.textContent = "Saving...";
+
+  const { error } =
+    await supabaseClient
+      .from("gun_skins")
+      .insert({
+        name: name,
+        image_url: imageUrl
+      });
+
+  if (error) {
+    console.error("Gun Skin error:", error);
+    message.textContent =
+      "❌ " + error.message;
+    return;
+  }
+
+  message.textContent =
+    "✅ Gun Skin added successfully!";
+
+  document.getElementById("gunSkinName").value = "";
+  document.getElementById("gunSkinImage").value = "";
 }
 
 
@@ -1115,6 +1213,13 @@ async function saveXSuit() {
     saveXSuit
   );
 
+   document
+  .getElementById("saveGunSkinButton")
+  .addEventListener(
+    "click",
+    saveGunSkin
+  ); 
+
     document
       .getElementById(
         "loginButton"
@@ -1208,6 +1313,8 @@ async function saveXSuit() {
     loadProfile();
 
     loadXSuits();
+
+    loadGunSkins();
 
   </script>
 
