@@ -298,8 +298,19 @@
   <section>
   <h2>🏆 Achievements</h2>
 
-  <div class="cards" id="achievementCards">
-    <div class="empty">Loading Achievements...</div>
+  <h3>🚗 Car Lab</h3>
+  <div class="cards" id="carLabCards">
+    <div class="empty">Loading Car Lab...</div>
+  </div>
+
+  <h3>🖼️ Frames</h3>
+  <div class="cards" id="frameCards">
+    <div class="empty">Loading Frames...</div>
+  </div>
+
+  <h3>🏆 Gilt</h3>
+  <div class="cards" id="giltCards">
+    <div class="empty">Loading Gilt...</div>
   </div>
 </section>
 
@@ -463,12 +474,25 @@
     id="achievementImage"
     accept="image/*"
   >
+  <select id="achievementCategory">
+  <option value="Car Lab">🚗 Car Lab</option>
+  <option value="Frames">🖼️ Frames</option>
+  <option value="Gilt">🏆 Gilt</option>
+</select>
+   
 
   <input
     type="text"
     id="achievementName"
     placeholder="Achievement Name"
   >
+
+  <input
+    type="text"
+    id="achievementName"
+    placeholder="Achievement Name"
+  >
+    
 
   <textarea
     id="achievementDescription"
@@ -1243,11 +1267,16 @@
   });
 }
 
-    async function loadAchievements() {
-  const container = document.getElementById("achievementCards");
+  async function loadAchievements() {
 
-  container.innerHTML =
-    '<div class="empty">Loading Achievements...</div>';
+  const carLabContainer =
+    document.getElementById("carLabCards");
+
+  const frameContainer =
+    document.getElementById("frameCards");
+
+  const giltContainer =
+    document.getElementById("giltCards");
 
   const { data, error } =
     await supabaseClient
@@ -1257,20 +1286,28 @@
 
   if (error) {
     console.error("Achievements error:", error);
-    container.innerHTML =
-      '<div class="empty">Achievements could not be loaded.</div>';
     return;
   }
+
+  carLabContainer.innerHTML = "";
+  frameContainer.innerHTML = "";
+  giltContainer.innerHTML = "";
 
   if (!data || data.length === 0) {
-    container.innerHTML =
-      '<div class="empty">No Achievements added yet.</div>';
+    carLabContainer.innerHTML =
+      '<div class="empty">No Car Lab achievements yet.</div>';
+
+    frameContainer.innerHTML =
+      '<div class="empty">No Frames achievements yet.</div>';
+
+    giltContainer.innerHTML =
+      '<div class="empty">No Gilt achievements yet.</div>';
+
     return;
   }
 
-  container.innerHTML = "";
-
   data.forEach(achievement => {
+
     const card = document.createElement("div");
     card.className = "card";
 
@@ -1290,8 +1327,19 @@
       }
     `;
 
-    container.appendChild(card);
+    if (achievement.category === "Car Lab") {
+      carLabContainer.appendChild(card);
+    }
+
+    if (achievement.category === "Frames") {
+      frameContainer.appendChild(card);
+    }
+
+    if (achievement.category === "Gilt") {
+      giltContainer.appendChild(card);
+    }
   });
+
 }
 
     async function saveAchievement() {
@@ -1304,6 +1352,8 @@
 
   const description =
     document.getElementById("achievementDescription").value.trim();
+  const category =
+  document.getElementById("achievementCategory").value;
 
   const message =
     document.getElementById("achievementMessage");
@@ -1345,10 +1395,11 @@
     await supabaseClient
       .from("achievements")
       .insert({
-        name: name,
-        description: description,
-        image_url: imageUrl
-      });
+  name: name,
+  description: description,
+  image_url: imageUrl,
+  category: category
+});
 
   if (insertError) {
     console.error(insertError);
