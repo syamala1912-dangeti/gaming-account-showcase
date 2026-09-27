@@ -721,7 +721,7 @@
       <strong>${suit.name}</strong>
       <br><br>
 
-      <button onclick="editXSuit(${suit.id}, '${suit.name.replace(/'/g, "\\'")}')">
+     <button onclick="editXSuit(${suit.id}, '${suit.name.replace(/'/g, "\\'")}', '${suit.image_url}')">
   ✏️ Edit
 </button>
 
@@ -765,7 +765,7 @@
   await loadXSuits();
   await loadXSuitAdminList();
 }
-    async function editXSuit(id, oldName) {
+    async function editXSuit(id, oldName, oldImageUrl) {
 
   const newName = prompt("Enter new X-Suit name:", oldName);
 
@@ -778,14 +778,71 @@
     return;
   }
 
+  const changeImage = confirm("Do you want to change the X-Suit image?");
+
+  let newImageUrl = oldImageUrl;
+
+  if (changeImage) {
+
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = async function () {
+
+      const file = input.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      const fileName = Date.now() + "_edited_" + file.name;
+
+      const { error: uploadError } =
+        await supabaseClient
+          .storage
+          .from("gaming-images")
+          .upload(fileName, file);
+
+      if (uploadError) {
+        console.error(uploadError);
+        alert("❌ New image upload failed.");
+        return;
+      }
+
+      const { data: urlData } =
+        supabaseClient
+          .storage
+          .from("gaming-images")
+          .getPublicUrl(fileName);
+
+      newImageUrl = urlData.publicUrl;
+
+      await updateXSuit(id, newName, newImageUrl);
+    };
+
+    input.click();
+
+  } else {
+
+    await updateXSuit(id, newName, newImageUrl);
+
+  }
+}
+
+    async function updateXSuit(id, newName, newImageUrl) {
+
   const { error } = await supabaseClient
     .from("x_suits")
-    .update({ name: newName.trim() })
+    .update({
+      name: newName.trim(),
+      image_url: newImageUrl
+    })
     .eq("id", id);
 
   if (error) {
-    console.error("Edit X-Suit error:", error);
-    alert("❌ X-Suit update failed.");
+    console.error("Update X-Suit error:", error);
+    alert("❌ X-Suit update failed: " + error.message);
     return;
   }
 
