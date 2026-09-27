@@ -443,6 +443,7 @@
   </button>
 
   <p id="gunSkinMessage"></p>
+  <div id="gunSkinAdminList"></div>
 
 </div>
 
@@ -689,6 +690,183 @@
 
   });
 }
+
+   async function loadGunSkinAdminList() {
+
+  const container =
+    document.getElementById("gunSkinAdminList");
+
+  const { data, error } =
+    await supabaseClient
+      .from("gun_skins")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error("Gun Skin admin list error:", error);
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(skin => {
+
+    const item = document.createElement("div");
+
+    item.style.marginTop = "15px";
+    item.style.padding = "12px";
+    item.style.border = "1px solid #302052";
+    item.style.borderRadius = "10px";
+
+    item.innerHTML = `
+      <strong>${skin.name}</strong>
+      <br><br>
+
+      <button onclick="editGunSkin(${skin.id}, '${skin.name.replace(/'/g, "\\'")}', '${skin.image_url}')">
+        ✏️ Edit
+      </button>
+
+      <button onclick="deleteGunSkin(${skin.id})">
+        🗑️ Delete
+      </button>
+    `;
+
+    container.appendChild(item);
+
+  });
+}
+
+    async function deleteGunSkin(id) {
+
+  const confirmDelete = confirm(
+    "Are you sure you want to delete this Gun Skin?"
+  );
+
+  if (!confirmDelete) {
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("gun_skins")
+    .delete()
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error("Delete Gun Skin error:", error);
+    alert("Delete failed: " + error.message);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    alert("❌ Gun Skin was not deleted.");
+    return;
+  }
+
+  alert("✅ Gun Skin deleted successfully!");
+
+  await loadGunSkins();
+  await loadGunSkinAdminList();
+}
+
+    async function editGunSkin(id, oldName, oldImageUrl) {
+
+  const newName = prompt("Enter new Gun Skin name:", oldName);
+
+  if (newName === null) {
+    return;
+  }
+
+  if (newName.trim() === "") {
+    alert("❌ Gun Skin name cannot be empty.");
+    return;
+  }
+
+  const changeImage = confirm(
+    "Do you want to change the Gun Skin image?"
+  );
+
+  let newImageUrl = oldImageUrl;
+
+  if (changeImage) {
+
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = async function () {
+
+      const file = input.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      const fileName =
+        Date.now() + "_edited_" + file.name;
+
+      const { error: uploadError } =
+        await supabaseClient
+          .storage
+          .from("gaming-images")
+          .upload(fileName, file);
+
+      if (uploadError) {
+        console.error(uploadError);
+        alert("❌ New image upload failed.");
+        return;
+      }
+
+      const { data: urlData } =
+        supabaseClient
+          .storage
+          .from("gaming-images")
+          .getPublicUrl(fileName);
+
+      newImageUrl = urlData.publicUrl;
+
+      await updateGunSkin(
+        id,
+        newName,
+        newImageUrl
+      );
+    };
+
+    input.click();
+
+  } else {
+
+    await updateGunSkin(
+      id,
+      newName,
+      newImageUrl
+    );
+
+  }
+}
+
+    async function updateGunSkin(id, newName, newImageUrl) {
+
+  const { error } = await supabaseClient
+    .from("gun_skins")
+    .update({
+      name: newName.trim(),
+      image_url: newImageUrl
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Update Gun Skin error:", error);
+    alert("❌ Gun Skin update failed: " + error.message);
+    return;
+  }
+
+  alert("✅ Gun Skin updated successfully!");
+
+  await loadGunSkins();
+  await loadGunSkinAdminList();
+}
+    
 
     async function loadXSuitAdminList() {
 
@@ -1145,6 +1323,7 @@ async function saveXSuits() {
   document.getElementById("gunSkinNames").value = "";
 
   await loadGunSkins();
+  await loadGunSkinAdminList();
 }
 
     
@@ -1423,6 +1602,7 @@ async function saveXSuits() {
             "profileEditor"
           ).style.display = "block";
           loadXSuitAdminList();
+          loadGunSkinAdminList();
 
         } else {
 
