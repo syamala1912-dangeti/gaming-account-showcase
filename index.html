@@ -420,30 +420,30 @@
   <p id="xSuitMessage"></p>
 
 </div>
-    <div id="gunSkinEditor" class="admin-box">
+   <div id="gunSkinEditor" class="admin-box">
 
-  <h2>🔫 Edit Gun Skins</h2>
-
-  <input
-    type="text"
-    id="gunSkinName"
-    placeholder="Gun Skin Name"
-  >
+  <h2>🔫 Add Multiple Gun Skins</h2>
 
   <input
-    type="text"
-    id="gunSkinImage"
-    placeholder="Image URL"
+    type="file"
+    id="gunSkinImages"
+    accept="image/*"
+    multiple
   >
 
-  <button id="saveGunSkinButton">
-    Add Gun Skin
+  <textarea
+    id="gunSkinNames"
+    placeholder="Enter Gun Skin names, one per line"
+    rows="6"
+  ></textarea>
+
+  <button id="saveGunSkinsButton">
+    Add Gun Skins
   </button>
 
   <p id="gunSkinMessage"></p>
 
 </div>
-
 
     <button id="galleryButton">
       📸 Gallery Manager
@@ -900,6 +900,89 @@ async function saveXSuits() {
   await loadXSuits();
 }
 
+    async function saveGunSkins() {
+
+  const files =
+    document.getElementById("gunSkinImages").files;
+
+  const names =
+    document.getElementById("gunSkinNames").value
+      .split("\n")
+      .map(name => name.trim())
+      .filter(name => name !== "");
+
+  const message =
+    document.getElementById("gunSkinMessage");
+
+  if (files.length === 0) {
+    message.textContent =
+      "❌ Please select Gun Skin images.";
+    return;
+  }
+
+  if (files.length !== names.length) {
+    message.textContent =
+      "❌ Images count and names count must be the same.";
+    return;
+  }
+
+  message.textContent =
+    "Uploading Gun Skins...";
+
+  for (let i = 0; i < files.length; i++) {
+
+    const file = files[i];
+
+    const fileName =
+      Date.now() + "_" + i + "_" + file.name;
+
+    const { error: uploadError } =
+      await supabaseClient
+        .storage
+        .from("gaming-images")
+        .upload(fileName, file);
+
+    if (uploadError) {
+      console.error(uploadError);
+      message.textContent =
+        "❌ Image upload failed.";
+      return;
+    }
+
+    const { data: urlData } =
+      supabaseClient
+        .storage
+        .from("gaming-images")
+        .getPublicUrl(fileName);
+
+    const imageUrl =
+      urlData.publicUrl;
+
+    const { error: insertError } =
+      await supabaseClient
+        .from("gun_skins")
+        .insert({
+          name: names[i],
+          image_url: imageUrl
+        });
+
+    if (insertError) {
+      console.error(insertError);
+      message.textContent =
+        "❌ Gun Skin save failed.";
+      return;
+    }
+  }
+
+  message.textContent =
+    "✅ All Gun Skins added successfully!";
+
+  document.getElementById("gunSkinImages").value = "";
+  document.getElementById("gunSkinNames").value = "";
+
+  await loadGunSkins();
+}
+
     
     /* =========================
        ADMIN LOGIN
@@ -1223,13 +1306,13 @@ async function saveXSuits() {
     saveXSuits
   );
 
-   document
-  .getElementById("saveGunSkinButton")
+  document
+  .getElementById("saveGunSkinsButton")
   .addEventListener(
     "click",
-    saveGunSkin
-  ); 
-
+    saveGunSkins
+  );
+    
     document
       .getElementById(
         "loginButton"
