@@ -627,6 +627,7 @@
       data.forEach(file => {
 
         if (!file.name) return;
+        if (file.name.includes("_achievement_")) return;
 
 
         const publicUrl =
