@@ -417,6 +417,21 @@
       <p id="profileMessage"></p>
 
     </div>
+    <div id="xSuitEditor" class="admin-box">
+
+  <h2>🔥 Edit X-Suits</h2>
+
+  <input type="text" id="xSuitName" placeholder="X-Suit Name">
+
+  <input type="text" id="xSuitImage" placeholder="Image URL">
+
+  <button id="saveXSuitButton">
+    Add X-Suit
+  </button>
+
+  <p id="xSuitMessage"></p>
+
+</div>
 
 
     <button id="galleryButton">
@@ -703,6 +718,45 @@
       await loadProfile();
 
     }
+
+   
+async function saveXSuit() {
+
+  const name =
+    document.getElementById("xSuitName").value.trim();
+
+  const imageUrl =
+    document.getElementById("xSuitImage").value.trim();
+
+  const message =
+    document.getElementById("xSuitMessage");
+
+  if (!name || !imageUrl) {
+    message.textContent = "❌ Please enter X-Suit name and image URL.";
+    return;
+  }
+
+  message.textContent = "Saving...";
+
+  const { error } =
+    await supabaseClient
+      .from("x_suits")
+      .insert({
+        name: name,
+        image_url: imageUrl
+      });
+
+  if (error) {
+    console.error("X-Suit error:", error);
+    message.textContent = "❌ " + error.message;
+    return;
+  }
+
+  message.textContent = "✅ X-Suit added successfully!";
+
+  document.getElementById("xSuitName").value = "";
+  document.getElementById("xSuitImage").value = "";
+}
 
 
     /* =========================
@@ -1020,6 +1074,12 @@
         saveProfile
       );
 
+    document
+  .getElementById("saveXSuitButton")
+  .addEventListener(
+    "click",
+    saveXSuit
+  );
 
     document
       .getElementById(
