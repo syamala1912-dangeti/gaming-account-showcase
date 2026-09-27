@@ -622,12 +622,20 @@
 
 
       gallery.innerHTML = "";
+      const { data: achievements } =
+  await supabaseClient
+    .from("achievements")
+    .select("image_url");
+
+const achievementImages =
+  (achievements || []).map(item => item.image_url);
 
 
       data.forEach(file => {
 
         if (!file.name) return;
         if (file.name.includes("_achievement_")) return;
+        if (achievementImages.some(url => url.includes(file.name))) return;
 
 
         const publicUrl =
