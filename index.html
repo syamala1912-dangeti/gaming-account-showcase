@@ -593,6 +593,136 @@
 
     }
 
+    async function loadGalleryAdminList() {
+
+  const container = document.getElementById("galleryManager");
+
+  const { data, error } =
+    await supabaseClient.storage
+      .from("gaming-images")
+      .list("", {
+        limit: 100,
+        sortBy: {
+          column: "name",
+          order: "desc"
+        }
+      });
+
+  if (error) {
+    console.error("Gallery admin error:", error);
+    return;
+  }
+
+  // Admin list area
+  let adminList = document.getElementById("galleryAdminList");
+
+  if (!adminList) {
+    adminList = document.createElement("div");
+    adminList.id = "galleryAdminList";
+    container.appendChild(adminList);
+  }
+
+  adminList.innerHTML = "";
+
+  data.forEach(file => {
+
+    if (!file.name) return;
+
+    const item = document.createElement("div");
+
+    item.style.marginTop = "15px";
+    item.style.padding = "12px";
+    item.style.border = "1px solid #302052";
+    item.style.borderRadius = "10px";
+
+    item.innerHTML = `
+      <strong>${file.name}</strong>
+      <br><br>
+
+      <button onclick="editGalleryImage('${file.name}')">
+        ✏️ Edit
+      </button>
+
+      <button onclick="deleteGalleryImage('${file.name}')">
+        🗑️ Delete
+      </button>
+    `;
+
+    adminList.appendChild(item);
+
+  });
+}
+
+    async function deleteGalleryImage(fileName) {
+
+  const confirmDelete =
+    confirm("Are you sure you want to delete this gallery image?");
+
+  if (!confirmDelete) return;
+
+  const { error } =
+    await supabaseClient.storage
+      .from("gaming-images")
+      .remove([fileName]);
+
+  if (error) {
+    console.error("Gallery delete error:", error);
+    alert("❌ Image delete failed: " + error.message);
+    return;
+  }
+
+  alert("✅ Gallery image deleted successfully!");
+
+  await loadGalleryImages();
+  await loadGalleryAdminList();
+}
+
+    async function editGalleryImage(oldFileName) {
+
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = async function () {
+
+    const file = input.files[0];
+
+    if (!file) return;
+
+    const newFileName =
+      Date.now() + "_edited_" + file.name;
+
+    const { error: uploadError } =
+      await supabaseClient.storage
+        .from("gaming-images")
+        .upload(newFileName, file);
+
+    if (uploadError) {
+      console.error("Gallery edit upload error:", uploadError);
+      alert("❌ New image upload failed.");
+      return;
+    }
+
+    const { error: deleteError } =
+      await supabaseClient.storage
+        .from("gaming-images")
+        .remove([oldFileName]);
+
+    if (deleteError) {
+      console.error("Old image delete error:", deleteError);
+      alert("❌ Old image could not be removed.");
+      return;
+    }
+
+    alert("✅ Gallery image updated successfully!");
+
+    await loadGalleryImages();
+    await loadGalleryAdminList();
+  };
+
+  input.click();
+}
+
 
     /* =========================
        LOAD PROFILE
@@ -1603,6 +1733,7 @@ async function saveXSuits() {
           ).style.display = "block";
           loadXSuitAdminList();
           loadGunSkinAdminList();
+          loadGalleryAdminList();
 
         } else {
 
