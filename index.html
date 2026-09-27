@@ -295,6 +295,13 @@
   </div>
 </section>
 
+  <section>
+  <h2>🏆 Achievements</h2>
+
+  <div class="cards" id="achievementCards">
+    <div class="empty">Loading Achievements...</div>
+  </div>
+</section>
 
   <!-- PUBLIC GALLERY -->
 
@@ -447,6 +454,38 @@
 
 </div>
 
+  <div id="achievementEditor" class="admin-box">
+
+  <h2>🏆 Add Achievement</h2>
+
+  <input
+    type="file"
+    id="achievementImage"
+    accept="image/*"
+  >
+
+  <input
+    type="text"
+    id="achievementName"
+    placeholder="Achievement Name"
+  >
+
+  <textarea
+    id="achievementDescription"
+    placeholder="Achievement Description"
+    rows="4"
+  ></textarea>
+
+  <button id="saveAchievementButton">
+    Add Achievement
+  </button>
+
+  <p id="achievementMessage"></p>
+
+  <div id="achievementAdminList"></div>
+
+</div>
+      
     <button id="galleryButton">
       📸 Gallery Manager
     </button>
@@ -1204,6 +1243,178 @@
   });
 }
 
+    async function loadAchievements() {
+  const container = document.getElementById("achievementCards");
+
+  container.innerHTML =
+    '<div class="empty">Loading Achievements...</div>';
+
+  const { data, error } =
+    await supabaseClient
+      .from("achievements")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error("Achievements error:", error);
+    container.innerHTML =
+      '<div class="empty">Achievements could not be loaded.</div>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML =
+      '<div class="empty">No Achievements added yet.</div>';
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(achievement => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      ${
+        achievement.image_url
+          ? `<img src="${achievement.image_url}" alt="${achievement.name}">`
+          : ""
+      }
+
+      <h3>${achievement.name}</h3>
+
+      ${
+        achievement.description
+          ? `<p>${achievement.description}</p>`
+          : ""
+      }
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+    async function saveAchievement() {
+
+  const file =
+    document.getElementById("achievementImage").files[0];
+
+  const name =
+    document.getElementById("achievementName").value.trim();
+
+  const description =
+    document.getElementById("achievementDescription").value.trim();
+
+  const message =
+    document.getElementById("achievementMessage");
+
+  if (!file) {
+    message.textContent = "❌ Please select an achievement image.";
+    return;
+  }
+
+  if (!name) {
+    message.textContent = "❌ Please enter achievement name.";
+    return;
+  }
+
+  message.textContent = "Uploading achievement...";
+
+  const fileName =
+    Date.now() + "_achievement_" + file.name;
+
+  const { error: uploadError } =
+    await supabaseClient.storage
+      .from("gaming-images")
+      .upload(fileName, file);
+
+  if (uploadError) {
+    console.error(uploadError);
+    message.textContent = "❌ Image upload failed.";
+    return;
+  }
+
+  const { data: urlData } =
+    supabaseClient.storage
+      .from("gaming-images")
+      .getPublicUrl(fileName);
+
+  const imageUrl = urlData.publicUrl;
+
+  const { error: insertError } =
+    await supabaseClient
+      .from("achievements")
+      .insert({
+        name: name,
+        description: description,
+        image_url: imageUrl
+      });
+
+  if (insertError) {
+    console.error(insertError);
+    message.textContent = "❌ Achievement save failed.";
+    return;
+  }
+
+  message.textContent =
+    "✅ Achievement added successfully!";
+
+  document.getElementById("achievementImage").value = "";
+  document.getElementById("achievementName").value = "";
+  document.getElementById("achievementDescription").value = "";
+
+  await loadAchievements();
+  await loadAchievementAdminList();
+}
+
+    document
+  .getElementById("saveAchievementButton")
+  .addEventListener("click", saveAchievement);
+
+   async function loadAchievementAdminList() {
+
+  const container =
+    document.getElementById("achievementAdminList");
+
+  const { data, error } =
+    await supabaseClient
+      .from("achievements")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error("Achievement admin list error:", error);
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(achievement => {
+
+    const item = document.createElement("div");
+
+    item.style.marginTop = "15px";
+    item.style.padding = "12px";
+    item.style.border = "1px solid #302052";
+    item.style.borderRadius = "10px";
+
+    item.innerHTML = `
+      <strong>${achievement.name}</strong>
+      <br><br>
+
+      <button onclick="editAchievement(${achievement.id})">
+        ✏️ Edit
+      </button>
+
+      <button onclick="deleteAchievement(${achievement.id})">
+        🗑️ Delete
+      </button>
+    `;
+
+    container.appendChild(item);
+  });
+} 
+    
     /* =========================
        SAVE PROFILE
     ========================= */
@@ -1884,6 +2095,10 @@ async function saveXSuits() {
     loadXSuits();
 
     loadGunSkins();
+
+    loadAchievements();
+
+    loadAchievementAdminList();
 
   </script>
 
