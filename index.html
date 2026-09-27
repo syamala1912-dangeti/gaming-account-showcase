@@ -418,6 +418,7 @@
   </button>
 
   <p id="xSuitMessage"></p>
+  <div id="xSuitAdminList"></div>
 
 </div>
    <div id="gunSkinEditor" class="admin-box">
@@ -689,6 +690,106 @@
   });
 }
 
+    async function loadXSuitAdminList() {
+
+  const container =
+    document.getElementById("xSuitAdminList");
+
+  const { data, error } =
+    await supabaseClient
+      .from("x_suits")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error("X-Suit admin list error:", error);
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(suit => {
+
+    const item = document.createElement("div");
+
+    item.style.marginTop = "15px";
+    item.style.padding = "12px";
+    item.style.border = "1px solid #302052";
+    item.style.borderRadius = "10px";
+
+    item.innerHTML = `
+      <strong>${suit.name}</strong>
+      <br><br>
+
+      <button onclick="editXSuit(${suit.id}, '${suit.name.replace(/'/g, "\\'")}')">
+  ✏️ Edit
+</button>
+
+<button onclick="deleteXSuit(${suit.id})">
+  🗑️ Delete
+</button>
+    `;
+
+    container.appendChild(item);
+
+  });
+}
+
+    async function deleteXSuit(id) {
+
+  const confirmDelete = confirm("Are you sure you want to delete this X-Suit?");
+
+  if (!confirmDelete) {
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("x_suits")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Delete X-Suit error:", error);
+    alert("❌ X-Suit delete failed.");
+    return;
+  }
+
+  alert("✅ X-Suit deleted successfully!");
+
+  await loadXSuits();
+  await loadXSuitAdminList();
+}
+
+    async function editXSuit(id, oldName) {
+
+  const newName = prompt("Enter new X-Suit name:", oldName);
+
+  if (newName === null) {
+    return;
+  }
+
+  if (newName.trim() === "") {
+    alert("❌ X-Suit name cannot be empty.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("x_suits")
+    .update({ name: newName.trim() })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Edit X-Suit error:", error);
+    alert("❌ X-Suit update failed.");
+    return;
+  }
+
+  alert("✅ X-Suit updated successfully!");
+
+  await loadXSuits();
+  await loadXSuitAdminList();
+}
+
     async function loadGunSkins() {
 
   const container =
@@ -898,6 +999,7 @@ async function saveXSuits() {
   document.getElementById("xSuitNames").value = "";
 
   await loadXSuits();
+  await loadXSuitAdminList();
 }
 
     async function saveGunSkins() {
@@ -1258,6 +1360,7 @@ async function saveXSuits() {
           document.getElementById(
             "profileEditor"
           ).style.display = "block";
+          loadXSuitAdminList();
 
         } else {
 
