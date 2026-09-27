@@ -277,22 +277,12 @@
   <!-- X-SUITS -->
 
   <section>
-    <h2>🔥 X-Suits</h2>
+  <h2>🔥 X-Suits</h2>
 
-    <div class="cards">
-
-      <div class="card">
-        <img src="images/xsuit1.jpg" alt="X-Suit">
-        <h3>X-Suit Collection</h3>
-      </div>
-
-      <div class="card">
-        <img src="images/xsuit2.jpg" alt="X-Suit">
-        <h3>Premium X-Suit</h3>
-      </div>
-
-    </div>
-  </section>
+  <div class="cards" id="xSuitCards">
+    <div class="empty">Loading X-Suits...</div>
+  </div>
+</section>
 
 
   <!-- GUN SKINS -->
@@ -633,6 +623,50 @@
       ).value = data.collection_count;
 
     }
+
+    async function loadXSuits() {
+
+  const container =
+    document.getElementById("xSuitCards");
+
+  container.innerHTML =
+    '<div class="empty">Loading X-Suits...</div>';
+
+  const { data, error } =
+    await supabaseClient
+      .from("x_suits")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error("X-Suits error:", error);
+    container.innerHTML =
+      '<div class="empty">X-Suits could not be loaded.</div>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML =
+      '<div class="empty">No X-Suits added yet.</div>';
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(suit => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="${suit.image_url}" alt="${suit.name}">
+      <h3>${suit.name}</h3>
+    `;
+
+    container.appendChild(card);
+
+  });
+}
 
 
     /* =========================
@@ -1172,6 +1206,8 @@ async function saveXSuit() {
     loadGalleryImages();
 
     loadProfile();
+
+    loadXSuits();
 
   </script>
 
