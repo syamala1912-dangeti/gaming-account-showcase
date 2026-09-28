@@ -330,7 +330,7 @@
   <h2>💬 Interested?</h2>
   <p>Join the WhatsApp Group for more information.</p>
 
-  <a href="YOUR_WHATSAPP_GROUP_LINK" target="_blank">
+  <a id="whatsappGroupButton" href="#" target="_blank">
     💬 Join WhatsApp Group
   </a>
 </div>
@@ -384,15 +384,25 @@
     <h2>⚙️ Admin Dashboard</h2>
 
 
-    <!-- PROFILE EDITOR -->
-
     <div id="profileEditor" class="admin-box">
+  <h2>👤 Edit Profile</h2>
 
-      <h2>👤 Edit Profile</h2>
+  <input type="text" id="profilePlayerName" placeholder="Player Name">
 
-      <input
-        type="text"
-        id="profilePlayerName"
+  <input type="number" id="profileAccountLevel" placeholder="Account Level">
+
+  <input type="number" id="profileCollection" placeholder="Collection Count">
+
+  <input
+    type="text"
+    id="profileWhatsappLink"
+    placeholder="WhatsApp Group Link"
+  >
+
+  <button id="saveProfileButton">Save Profile</button>
+
+  <p id="profileMessage"></p>
+</div>
         placeholder="Player Name"
       >
 
@@ -839,6 +849,16 @@ const achievementImages =
       document.getElementById(
         "profileCollection"
       ).value = data.collection_count;
+
+      document.getElementById("profileWhatsappLink").value =
+  data.whatsapp_group_link || "";
+
+      const whatsappButton =
+  document.getElementById("whatsappGroupButton");
+
+if (whatsappButton) {
+  whatsappButton.href = data.whatsapp_group_link || "#";
+}
 
     }
 
@@ -1519,15 +1539,15 @@ const achievementImages =
         "Saving...";
 
 
-      const { error } =
-        await supabaseClient
-          .from("site_profile")
-          .update({
-            player_name: playerName,
-            account_level: accountLevel,
-            collection_count: collectionCount
-          })
-          .eq("id", 1);
+      const { error } = await supabase
+  .from("site_profile")
+  .update({
+    player_name: playerName,
+    account_level: accountLevel,
+    collection_count: collection,
+    whatsapp_group_link: document.getElementById("profileWhatsappLink").value.trim()
+  })
+  .eq("id", 1);
 
 
       if (error) {
