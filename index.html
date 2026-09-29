@@ -1019,6 +1019,46 @@ if (whatsappButton) {
   });
 }
 
+    async function loadGunSkinProfiles() {
+
+  const select =
+    document.getElementById("gunSkinProfile");
+
+  if (!select) return;
+
+  const { data, error } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .select("id, player_name")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error(
+      "Gun Skin profile error:",
+      error
+    );
+    return;
+  }
+
+  select.innerHTML =
+    '<option value="">Select Gaming Profile</option>';
+
+  data.forEach(profile => {
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      profile.id;
+
+    option.textContent =
+      profile.player_name;
+
+    select.appendChild(option);
+
+  });
+}
+    
 async function loadGamingProfileAdminList() {
 
   const container =
@@ -2808,6 +2848,8 @@ async function saveXSuits() {
 loadGamingProfileAdminList();
 
     loadXSuitProfiles();
+
+    loadGunSkinProfiles();
 
     loadXSuits();
 
