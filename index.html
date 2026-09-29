@@ -1974,6 +1974,12 @@ document
   await loadGamingProfiles();
   await loadGamingProfileAdminList();
 }
+  document
+  .getElementById("saveGamingProfileButton")
+  .addEventListener(
+    "click",
+    saveGamingProfile
+  );
     
 async function saveXSuits() {
 
