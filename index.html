@@ -1594,6 +1594,46 @@ if (whatsappButton) {
 
     }
 
+    async function saveSiteSettings() {
+
+  const websiteName =
+    document.getElementById("websiteName").value.trim();
+
+  const tagline =
+    document.getElementById("websiteTagline").value.trim();
+
+  const message =
+    document.getElementById("siteSettingsMessage");
+
+  if (!websiteName) {
+    message.textContent = "❌ Please enter website name.";
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from("site_settings")
+      .update({
+        website_name: websiteName,
+        tagline: tagline
+      })
+      .eq("id", 1);
+
+  if (error) {
+    console.error("Site settings error:", error);
+    message.textContent =
+      "❌ Settings update failed: " + error.message;
+    return;
+  }
+
+  message.textContent =
+    "✅ Website settings updated successfully!";
+}
+
+document
+  .getElementById("saveSiteSettingsButton")
+  .addEventListener("click", saveSiteSettings);
+
    
 async function saveXSuits() {
 
