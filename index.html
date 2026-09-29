@@ -1003,13 +1003,99 @@ async function loadGamingProfileAdminList() {
       Account Level: ${profile.account_level}
       <br>
       Collection: ${profile.collection_count}
+      <br><br>
+
+      <button onclick="editGamingProfile(${profile.id})">
+        ✏️ Edit
+      </button>
+
+      <button onclick="deleteGamingProfile(${profile.id})">
+        🗑️ Delete
+      </button>
     `;
 
     container.appendChild(item);
   });
 }
-    
 
+
+async function editGamingProfile(id) {
+
+  const { data, error } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+  if (error) {
+    alert("❌ Profile could not be loaded.");
+    return;
+  }
+
+  const playerName =
+    prompt("Enter Player Name:", data.player_name);
+
+  if (playerName === null) return;
+
+  const accountLevel =
+    prompt("Enter Account Level:", data.account_level);
+
+  if (accountLevel === null) return;
+
+  const collectionCount =
+    prompt("Enter Collection Count:", data.collection_count);
+
+  if (collectionCount === null) return;
+
+  const { error: updateError } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .update({
+        player_name: playerName.trim(),
+        account_level: Number(accountLevel),
+        collection_count: Number(collectionCount)
+      })
+      .eq("id", id);
+
+  if (updateError) {
+    alert("❌ Update failed: " + updateError.message);
+    return;
+  }
+
+  alert("✅ Gaming profile updated successfully!");
+
+  await loadGamingProfiles();
+  await loadGamingProfileAdminList();
+}
+
+
+async function deleteGamingProfile(id) {
+
+  const confirmDelete =
+    confirm(
+      "Are you sure you want to delete this gaming profile?"
+    );
+
+  if (!confirmDelete) return;
+
+  const { error } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .delete()
+      .eq("id", id);
+
+  if (error) {
+    alert("❌ Delete failed: " + error.message);
+    return;
+  }
+
+  alert("✅ Gaming profile deleted successfully!");
+
+  await loadGamingProfiles();
+  await loadGamingProfileAdminList();
+}
+    
     async function loadSiteSettings() {
 
   const { data, error } =
