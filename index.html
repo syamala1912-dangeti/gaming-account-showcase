@@ -2275,7 +2275,7 @@ async function saveXSuits() {
   await loadXSuits();
   await loadXSuitAdminList();
 }
-    async function saveGunSkins() {
+   async function saveGunSkins() {
 
   const files =
     document.getElementById("gunSkinImages").files;
@@ -2286,8 +2286,17 @@ async function saveXSuits() {
       .map(name => name.trim())
       .filter(name => name !== "");
 
+  const profileId =
+    document.getElementById("gunSkinProfile").value;
+
   const message =
     document.getElementById("gunSkinMessage");
+
+  if (!profileId) {
+    message.textContent =
+      "❌ Please select a Gaming Profile.";
+    return;
+  }
 
   if (files.length === 0) {
     message.textContent =
@@ -2319,8 +2328,10 @@ async function saveXSuits() {
 
     if (uploadError) {
       console.error(uploadError);
+
       message.textContent =
         "❌ Image upload failed.";
+
       return;
     }
 
@@ -2338,13 +2349,16 @@ async function saveXSuits() {
         .from("gun_skins")
         .insert({
           name: names[i],
-          image_url: imageUrl
+          image_url: imageUrl,
+          profile_id: Number(profileId)
         });
 
     if (insertError) {
       console.error(insertError);
+
       message.textContent =
         "❌ Gun Skin save failed.";
+
       return;
     }
   }
@@ -2354,11 +2368,11 @@ async function saveXSuits() {
 
   document.getElementById("gunSkinImages").value = "";
   document.getElementById("gunSkinNames").value = "";
+  document.getElementById("gunSkinProfile").value = "";
 
   await loadGunSkins();
   await loadGunSkinAdminList();
 }
-
     
     /* =========================
        ADMIN LOGIN
