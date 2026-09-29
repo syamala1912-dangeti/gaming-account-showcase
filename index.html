@@ -1059,9 +1059,71 @@ async function editGamingProfile(id) {
   if (accountLevel === null) return;
 
   const collectionCount =
-    prompt("Enter Collection Count:", data.collection_count);
+    prompt(
+      "Enter Collection Count:",
+      data.collection_count
+    );
 
   if (collectionCount === null) return;
+
+  const changeImage =
+    confirm(
+      "Do you want to change the profile image?"
+    );
+
+  let profileImageUrl =
+    data.profile_image_url;
+
+  if (changeImage) {
+
+    const imageInput =
+      document.getElementById("gamingProfileImage");
+
+    imageInput.click();
+
+    await new Promise(resolve => {
+
+      imageInput.onchange = () => {
+        resolve();
+      };
+
+    });
+
+    const imageFile =
+      imageInput.files[0];
+
+    if (imageFile) {
+
+      const fileName =
+        Date.now() +
+        "_profile_" +
+        imageFile.name;
+
+      const { error: uploadError } =
+        await supabaseClient.storage
+          .from("gaming-images")
+          .upload(
+            fileName,
+            imageFile
+          );
+
+      if (uploadError) {
+
+        alert(
+          "❌ Image upload failed: " +
+          uploadError.message
+        );
+
+        return;
+      }
+
+      profileImageUrl =
+        supabaseClient.storage
+          .from("gaming-images")
+          .getPublicUrl(fileName)
+          .data.publicUrl;
+    }
+  }
 
   const { error: updateError } =
     await supabaseClient
@@ -1069,22 +1131,33 @@ async function editGamingProfile(id) {
       .update({
         player_name: playerName.trim(),
         account_level: Number(accountLevel),
-        collection_count: Number(collectionCount)
+        collection_count: Number(collectionCount),
+        profile_image_url: profileImageUrl
       })
       .eq("id", id);
 
   if (updateError) {
-    alert("❌ Update failed: " + updateError.message);
+
+    alert(
+      "❌ Update failed: " +
+      updateError.message
+    );
+
     return;
   }
 
-  alert("✅ Gaming profile updated successfully!");
+  alert(
+    "✅ Gaming profile updated successfully!"
+  );
+
+  document.getElementById(
+    "gamingProfileImage"
+  ).value = "";
 
   await loadGamingProfiles();
   await loadGamingProfileAdminList();
 }
-
-
+    
 async function deleteGamingProfile(id) {
 
   const confirmDelete =
