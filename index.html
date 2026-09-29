@@ -1221,7 +1221,100 @@ async function deleteGamingProfile(id) {
     data.tagline;
 }
 
-    async function loadXSuits() {
+async function loadXSuits() {
+
+  const container =
+    document.getElementById("xSuitCards");
+
+  if (!container) return;
+
+  const section =
+    container.parentElement;
+
+  let selector =
+    document.getElementById("xSuitPublicProfile");
+
+  if (!selector) {
+
+    selector =
+      document.createElement("select");
+
+    selector.id =
+      "xSuitPublicProfile";
+
+    selector.style.marginBottom =
+      "20px";
+
+    selector.style.padding =
+      "10px";
+
+    selector.style.borderRadius =
+      "8px";
+
+    section.insertBefore(
+      selector,
+      container
+    );
+
+    selector.addEventListener(
+      "change",
+      () => {
+        loadXSuitsByProfile(
+          selector.value
+        );
+      }
+    );
+  }
+
+  const { data: profiles, error: profileError } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .select("id, player_name")
+      .order("id", { ascending: false });
+
+  if (profileError) {
+    console.error(
+      "Gaming profiles error:",
+      profileError
+    );
+    return;
+  }
+
+  selector.innerHTML =
+    '<option value="">Select Gaming Profile</option>';
+
+  profiles.forEach(profile => {
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      profile.id;
+
+    option.textContent =
+      profile.player_name;
+
+    selector.appendChild(option);
+  });
+
+  if (profiles.length > 0) {
+
+    selector.value =
+      profiles[0].id;
+
+    await loadXSuitsByProfile(
+      profiles[0].id
+    );
+
+  } else {
+
+    container.innerHTML =
+      '<div class="empty">No Gaming Profiles yet.</div>';
+  }
+}
+
+
+async function loadXSuitsByProfile(profileId) {
 
   const container =
     document.getElementById("xSuitCards");
@@ -1233,18 +1326,27 @@ async function deleteGamingProfile(id) {
     await supabaseClient
       .from("x_suits")
       .select("*")
+      .eq("profile_id", profileId)
       .order("id", { ascending: false });
 
   if (error) {
-    console.error("X-Suits error:", error);
+
+    console.error(
+      "X-Suits error:",
+      error
+    );
+
     container.innerHTML =
       '<div class="empty">X-Suits could not be loaded.</div>';
+
     return;
   }
 
   if (!data || data.length === 0) {
+
     container.innerHTML =
-      '<div class="empty">No X-Suits added yet.</div>';
+      '<div class="empty">No X-Suits added for this profile.</div>';
+
     return;
   }
 
@@ -1252,11 +1354,17 @@ async function deleteGamingProfile(id) {
 
   data.forEach(suit => {
 
-    const card = document.createElement("div");
-    card.className = "card";
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "card";
 
     card.innerHTML = `
-      <img src="${suit.image_url}" alt="${suit.name}">
+      <img
+        src="${suit.image_url}"
+        alt="${suit.name}"
+      >
       <h3>${suit.name}</h3>
     `;
 
@@ -1264,7 +1372,7 @@ async function deleteGamingProfile(id) {
 
   });
 }
-
+    
    async function loadGunSkinAdminList() {
 
   const container =
