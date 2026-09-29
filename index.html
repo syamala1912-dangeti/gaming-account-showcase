@@ -916,6 +916,93 @@ if (whatsappButton) {
 
     }
 
+    async function loadGamingProfiles() {
+
+  const { data, error } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error("Gaming profiles error:", error);
+    return;
+  }
+
+  const container =
+    document.getElementById("gamingProfiles");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!data || data.length === 0) {
+    container.innerHTML =
+      '<div class="empty">No gaming profiles yet.</div>';
+    return;
+  }
+
+  data.forEach(profile => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <h3>${profile.player_name}</h3>
+      <p>Account Level: ${profile.account_level}</p>
+      <p>Collection: ${profile.collection_count}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+
+async function loadGamingProfileAdminList() {
+
+  const container =
+    document.getElementById("gamingProfileAdminList");
+
+  if (!container) return;
+
+  const { data, error } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .select("*")
+      .order("id", { ascending: false });
+
+  if (error) {
+    console.error(
+      "Gaming profile admin error:",
+      error
+    );
+    return;
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(profile => {
+
+    const item = document.createElement("div");
+
+    item.style.marginTop = "15px";
+    item.style.padding = "12px";
+    item.style.border = "1px solid #302052";
+    item.style.borderRadius = "10px";
+
+    item.innerHTML = `
+      <strong>${profile.player_name}</strong>
+      <br>
+      Account Level: ${profile.account_level}
+      <br>
+      Collection: ${profile.collection_count}
+    `;
+
+    container.appendChild(item);
+  });
+}
+    
+
     async function loadSiteSettings() {
 
   const { data, error } =
