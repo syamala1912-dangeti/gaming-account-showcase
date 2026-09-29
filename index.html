@@ -1687,7 +1687,70 @@ document
   .getElementById("saveSiteSettingsButton")
   .addEventListener("click", saveSiteSettings);
 
-   
+   async function saveGamingProfile() {
+
+  const playerName =
+    document.getElementById("gamingPlayerName").value.trim();
+
+  const accountLevel =
+    Number(
+      document.getElementById("gamingAccountLevel").value
+    );
+
+  const collectionCount =
+    Number(
+      document.getElementById("gamingCollectionCount").value
+    );
+
+  const message =
+    document.getElementById("gamingProfileMessage");
+
+  if (!playerName) {
+    message.textContent =
+      "❌ Please enter player name.";
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from("gaming_profiles")
+      .insert({
+        player_name: playerName,
+        account_level: accountLevel || 1,
+        collection_count: collectionCount || 0
+      });
+
+  if (error) {
+    console.error(
+      "Gaming profile error:",
+      error
+    );
+
+    message.textContent =
+      "❌ " + error.message;
+
+    return;
+  }
+
+  message.textContent =
+    "✅ Gaming profile added successfully!";
+
+  document.getElementById("gamingPlayerName").value = "";
+  document.getElementById("gamingAccountLevel").value = "";
+  document.getElementById("gamingCollectionCount").value = "";
+
+  await loadGamingProfiles();
+  await loadGamingProfileAdminList();
+}
+
+
+document
+  .getElementById("saveGamingProfileButton")
+  .addEventListener(
+    "click",
+    saveGamingProfile
+  );
+    
 async function saveXSuits() {
 
   const files =
