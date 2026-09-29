@@ -393,6 +393,12 @@
   <h2>🎮 Add Gaming Profile</h2>
 
   <input
+  type="file"
+  id="gamingProfileImage"
+  accept="image/*"
+>
+      
+  <input
     type="text"
     id="gamingPlayerName"
     placeholder="Player Name"
@@ -923,7 +929,7 @@ if (whatsappButton) {
 
     }
 
-    async function loadGamingProfiles() {
+   async function loadGamingProfiles() {
 
   const { data, error } =
     await supabaseClient
@@ -955,6 +961,16 @@ if (whatsappButton) {
     card.className = "card";
 
     card.innerHTML = `
+      ${
+        profile.profile_image_url
+          ? `<img
+              src="${profile.profile_image_url}"
+              alt="${profile.player_name}"
+              style="width:100%; height:180px; object-fit:cover; border-radius:12px;"
+            >`
+          : ""
+      }
+
       <h3>${profile.player_name}</h3>
       <p>Account Level: ${profile.account_level}</p>
       <p>Collection: ${profile.collection_count}</p>
@@ -963,7 +979,6 @@ if (whatsappButton) {
     container.appendChild(card);
   });
 }
-
 
 async function loadGamingProfileAdminList() {
 
@@ -1882,6 +1897,9 @@ document
       document.getElementById("gamingCollectionCount").value
     );
 
+  const imageFile =
+    document.getElementById("gamingProfileImage").files[0];
+
   const message =
     document.getElementById("gamingProfileMessage");
 
@@ -1891,13 +1909,46 @@ document
     return;
   }
 
+  let profileImageUrl = null;
+
+  if (imageFile) {
+
+    const fileName =
+      Date.now() + "_profile_" + imageFile.name;
+
+    const { error: uploadError } =
+      await supabaseClient.storage
+        .from("gaming-images")
+        .upload(fileName, imageFile);
+
+    if (uploadError) {
+      console.error(
+        "Profile image upload error:",
+        uploadError
+      );
+
+      message.textContent =
+        "❌ Image upload failed: " +
+        uploadError.message;
+
+      return;
+    }
+
+    profileImageUrl =
+      supabaseClient.storage
+        .from("gaming-images")
+        .getPublicUrl(fileName)
+        .data.publicUrl;
+  }
+
   const { error } =
     await supabaseClient
       .from("gaming_profiles")
       .insert({
         player_name: playerName,
         account_level: accountLevel || 1,
-        collection_count: collectionCount || 0
+        collection_count: collectionCount || 0,
+        profile_image_url: profileImageUrl
       });
 
   if (error) {
@@ -1918,18 +1969,11 @@ document
   document.getElementById("gamingPlayerName").value = "";
   document.getElementById("gamingAccountLevel").value = "";
   document.getElementById("gamingCollectionCount").value = "";
+  document.getElementById("gamingProfileImage").value = "";
 
   await loadGamingProfiles();
   await loadGamingProfileAdminList();
 }
-
-
-document
-  .getElementById("saveGamingProfileButton")
-  .addEventListener(
-    "click",
-    saveGamingProfile
-  );
     
 async function saveXSuits() {
 
