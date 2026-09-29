@@ -1066,63 +1066,45 @@ async function editGamingProfile(id) {
 
   if (collectionCount === null) return;
 
-  const changeImage =
-    confirm(
-      "Do you want to change the profile image?"
-    );
+  const imageInput =
+    document.getElementById("gamingProfileImage");
+
+  const imageFile =
+    imageInput.files[0];
 
   let profileImageUrl =
     data.profile_image_url;
 
-  if (changeImage) {
+  if (imageFile) {
 
-    const imageInput =
-      document.getElementById("gamingProfileImage");
+    const fileName =
+      Date.now() +
+      "_profile_" +
+      imageFile.name;
 
-    imageInput.click();
-
-    await new Promise(resolve => {
-
-      imageInput.onchange = () => {
-        resolve();
-      };
-
-    });
-
-    const imageFile =
-      imageInput.files[0];
-
-    if (imageFile) {
-
-      const fileName =
-        Date.now() +
-        "_profile_" +
-        imageFile.name;
-
-      const { error: uploadError } =
-        await supabaseClient.storage
-          .from("gaming-images")
-          .upload(
-            fileName,
-            imageFile
-          );
-
-      if (uploadError) {
-
-        alert(
-          "❌ Image upload failed: " +
-          uploadError.message
+    const { error: uploadError } =
+      await supabaseClient.storage
+        .from("gaming-images")
+        .upload(
+          fileName,
+          imageFile
         );
 
-        return;
-      }
+    if (uploadError) {
 
-      profileImageUrl =
-        supabaseClient.storage
-          .from("gaming-images")
-          .getPublicUrl(fileName)
-          .data.publicUrl;
+      alert(
+        "❌ Image upload failed: " +
+        uploadError.message
+      );
+
+      return;
     }
+
+    profileImageUrl =
+      supabaseClient.storage
+        .from("gaming-images")
+        .getPublicUrl(fileName)
+        .data.publicUrl;
   }
 
   const { error: updateError } =
@@ -1150,9 +1132,7 @@ async function editGamingProfile(id) {
     "✅ Gaming profile updated successfully!"
   );
 
-  document.getElementById(
-    "gamingProfileImage"
-  ).value = "";
+  imageInput.value = "";
 
   await loadGamingProfiles();
   await loadGamingProfileAdminList();
