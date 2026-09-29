@@ -884,6 +884,27 @@ if (whatsappButton) {
 
     }
 
+    async function loadSiteSettings() {
+
+  const { data, error } =
+    await supabaseClient
+      .from("site_settings")
+      .select("*")
+      .eq("id", 1)
+      .single();
+
+  if (error) {
+    console.error("Site settings error:", error);
+    return;
+  }
+
+  document.getElementById("siteName").textContent =
+    data.website_name;
+
+  document.getElementById("siteTagline").textContent =
+    data.tagline;
+}
+
     async function loadXSuits() {
 
   const container =
